@@ -10,7 +10,7 @@ import com.atide.bim.utils.PointUtils;
 /**
  * Created by atide on 2016/3/21.
  */
-public class RectShape extends Shape {
+public abstract class RectShape extends Shape {
     private PointF leftTop,rightBottom;
     protected PointF lt,rb;
 

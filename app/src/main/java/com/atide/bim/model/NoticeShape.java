@@ -39,4 +39,9 @@ public class NoticeShape extends PointShape {
     public int getIcon() {
         return R.drawable.notice_icon;
     }
+
+    @Override
+    public String getName() {
+        return "Text";
+    }
 }

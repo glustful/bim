@@ -3,6 +3,9 @@ package com.atide.bim.helper;
 import android.graphics.PointF;
 import android.graphics.RectF;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.CompoundButton;
+
 import com.atide.bim.model.Arrow;
 import com.atide.bim.model.Brush;
 import com.atide.bim.model.CameraShape;
@@ -109,7 +112,11 @@ public class LayerViewTouchHelper {
         shape.invalidate(PointUtils.convertPercentPF(attacher.getDisplayRect(), new PointF(ev.getX(), ev.getY())));
         ((LayerView)attacher.getImageView()).addShape(shape);
         attacher.getImageView().invalidate();
-       // attacher.setmAllowHandController(false);
+        attacher.setAllowHandController(false);
+        View view = attacher.getImageView();
+        if(view.getTag() != null && view.getTag() instanceof CompoundButton){
+            ((CompoundButton)view.getTag()).setChecked(false);
+        }
     }
 
     private float preX,preY;

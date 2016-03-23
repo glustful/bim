@@ -2,6 +2,7 @@ package com.atide.bim.ui.home;
 
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.PopupWindow;
@@ -14,6 +15,8 @@ import com.atide.bim.model.ProjectModel;
 import com.atide.bim.sqlite.DatabaseManager;
 import com.atide.bim.ui.popup.MainActivityPopup;
 import com.atide.ui.XListView;
+import com.atide.utils.net.webservice.WsRequest;
+import com.atide.utils.net.webservice.WsResponseMessage;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
@@ -62,6 +65,7 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
        // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.main_home_item,R.id.title,data);
         mXListView.setAdapter(adapter);
         adapter.reload(initData());
+        testWebService();
     }
 
     private ArrayList<ProjectModel> initData(){
@@ -99,6 +103,20 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
         mXListView.stopLoadMore();
         mXListView.stopRefresh();
         mXListView.setRefreshTime("刚刚");
+    }
+
+    private void testWebService(){
+        new WsRequest(){
+            @Override
+            public void onResponse(WsResponseMessage msg) {
+                Log.d("response","response="+msg.mData);
+            }
+        }.setHost("http://220.164.192.83:9300")
+        .setUrl("/Services/PartWebService.asmx")
+        .setNameSpace("http://www.atidesoft.com/PartWebService/")
+        .setMethodName("GetUserSects")
+        .addParam("userId","1")
+        .notifyRequest();
     }
 
     public static interface ContentChangeListener{

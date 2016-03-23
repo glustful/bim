@@ -32,6 +32,7 @@ import android.view.ViewParent;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
@@ -97,6 +98,7 @@ public class PhotoViewAttacher implements IPhotoView, View.OnTouchListener,
 
     public void setAllowHandController(boolean mAllowHandController) {
         this.mAllowHandController = mAllowHandController;
+
     }
 
     private boolean mAllowParentInterceptOnEdge = true;

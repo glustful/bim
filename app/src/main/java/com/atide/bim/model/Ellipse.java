@@ -17,5 +17,8 @@ public class Ellipse extends RectShape {
         myCanvas.drawOval(new RectF(lt.x,lt.y,rb.x,rb.y),myPaint);
     }
 
-
+    @Override
+    public String getName() {
+        return "Ellipse";
+    }
 }

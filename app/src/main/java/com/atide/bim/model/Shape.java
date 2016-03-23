@@ -12,14 +12,10 @@ import android.graphics.RectF;
 public abstract  class Shape {
     protected int mColor = Color.RED;
     public abstract void draw(Canvas myCanvas,Paint myPaint,RectF displayRect);
-    public void onDraw(Canvas myCanvas,Paint myPaint,RectF displayRect){
-        int tmpColor = myPaint.getColor();
-        myPaint.setColor(mColor);
-        draw(myCanvas,myPaint,displayRect);
-        myPaint.setColor(tmpColor);
-    }
+
     public abstract void invalidate(PointF pointF);
     public abstract boolean isChecked(PointF pointF);
+    public abstract String getName();
     public void save(){
 
     }
@@ -30,6 +26,17 @@ public abstract  class Shape {
 
     public void setmColor(int mColor) {
         this.mColor = mColor;
+    }
+
+    public void onDraw(Canvas myCanvas,Paint myPaint,RectF displayRect){
+        int tmpColor = myPaint.getColor();
+        myPaint.setColor(mColor);
+        draw(myCanvas,myPaint,displayRect);
+        myPaint.setColor(tmpColor);
+    }
+
+    public boolean isEdit(){
+        return false;
     }
 
     public static enum ShapeType{

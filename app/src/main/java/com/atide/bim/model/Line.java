@@ -54,4 +54,9 @@ public class Line extends Shape {
         }
         return false;
     }
+
+    @Override
+    public String getName() {
+        return "Line";
+    }
 }

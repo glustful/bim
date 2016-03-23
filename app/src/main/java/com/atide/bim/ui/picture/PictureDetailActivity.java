@@ -12,12 +12,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.atide.bim.R;
+import com.atide.bim.helper.LayerViewClickHelper;
 import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.NoticeShape;
 import com.atide.bim.model.Shape;
@@ -48,6 +50,8 @@ public class PictureDetailActivity extends Activity {
 	private PhotoViewAttacher mAttacher;
 	private String capturePath;
 	private Context mContext;
+	private CompoundButton checkedBox;
+	private LayerViewClickHelper layerViewClickHelper;
 	@ViewById(R.id.image)
 	LayerView mImageView;
 
@@ -66,11 +70,16 @@ public class PictureDetailActivity extends Activity {
 	void checkedChangedOnSomeButtons(CompoundButton button, boolean isChicked) {
 
 		if (!button.isChecked()){
+			checkedBox = null;
 			mAttacher.setAllowHandController(false);
 			return;
 			//rb.setChecked(false);
 		}
-		changeBackground(button);
+		if (checkedBox != null)
+			checkedBox.setChecked(false);
+		checkedBox = button;
+		mImageView.setTag(checkedBox);
+		//changeBackground(button);
 		mAttacher.setAllowHandController(true);
 		switch (button.getId()){
 			case R.id.ellipse:
@@ -121,36 +130,13 @@ public class PictureDetailActivity extends Activity {
 	void initUI(){
 		mContext = this;
 		mAttacher = new PhotoViewAttacher(mImageView);
-
+		layerViewClickHelper = new LayerViewClickHelper(mImageView);
 		mImageView.setAttacher(mAttacher);
 
 		mAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
 			@Override
 			public void onPhotoTap(View view, float x, float y) {
-				ArrayList<Shape> shapes = ((LayerView) mAttacher.getImageView()).getShapes();
-				if (shapes == null || shapes.size() < 1)
-					return;
-				int count = 0;
-				for (Shape shape : shapes) {
-
-					if (shape.isChecked(new PointF(x,y))){
-						if (shape instanceof CameraShape){
-							PictureSureActivity_.intent(mContext).photoUri(((CameraShape)shape).getPhotoUri()).start();
-							return;
-						}
-						if (shape instanceof NoticeShape){
-							NoticeEditDailog_.builder().build().setShape((NoticeShape) shape).show(getFragmentManager(), "noticeEdit");
-							return;
-						}
-
-						count ++;
-					}
-				}
-				if (count>0){
-					new ChoiceShapePopup(PictureDetailActivity.this).showPopupWindow(mImageView);
-				}
-
-
+				layerViewClickHelper.clickEvent(x,y);
 			}
 		});
 
@@ -236,20 +222,7 @@ public class PictureDetailActivity extends Activity {
 			intent.setData(uri);
 			sendBroadcast(intent);
 			PictureSureActivity_.intent(this).photoUri(capturePath).start();
-			/*Uri uri = data.getData();
-			if(uri == null){
-				//use bundle to get data
-				Bundle bundle = data.getExtras();
-				if (bundle != null) {
-					Bitmap  photo = (Bitmap) bundle.get("data"); //get bitmap
 
-				} else {
-					Toast.makeText(getApplicationContext(), "err****", Toast.LENGTH_LONG).show();
-					return;
-				}
-			}else{
-				//to do find the path of pic by uri
-			}*/
 		}
 	}
 

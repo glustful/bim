@@ -129,6 +129,10 @@ public class Arrow extends Shape{
         }else{
             return false;
         }
+    }
 
+    @Override
+    public String getName() {
+        return "Arrow";
     }
 }

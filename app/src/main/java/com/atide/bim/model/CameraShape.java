@@ -40,5 +40,8 @@ public class CameraShape extends PointShape {
         return R.drawable.camera;
     }
 
-
+    @Override
+    public String getName() {
+        return "Camera";
+    }
 }

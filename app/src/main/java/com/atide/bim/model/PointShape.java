@@ -38,5 +38,11 @@ public abstract class PointShape extends Shape {
         return false;
     }
 
+    @Override
+    public boolean isEdit() {
+        return true;
+    }
+
     public abstract int getIcon();
+
 }

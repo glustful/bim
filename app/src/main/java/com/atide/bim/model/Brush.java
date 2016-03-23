@@ -16,4 +16,9 @@ public class Brush extends Line {
         super.draw(myCanvas, myPaint, displayRect);
         myPaint.setStrokeWidth(width);
     }
+
+    @Override
+    public String getName() {
+        return "Brush";
+    }
 }
