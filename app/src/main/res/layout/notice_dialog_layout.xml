@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="wrap_content" >
+
+
+
+    <LinearLayout
+        android:background="@android:color/darker_gray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <CheckBox
+            android:id="@+id/border"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Border"
+            android:drawableBottom="@drawable/tools_selector"/>
+        <RadioGroup
+            android:id="@+id/group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical">
+            <RadioButton
+                android:id="@+id/small"
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:textSize="10pt"
+                android:tag="10"
+                android:background="@drawable/tools_selector"
+                android:text="A"/>
+            <RadioButton
+                android:id="@+id/middle"
+                android:padding="10dp"
+                android:tag="12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:background="@drawable/tools_selector"
+                android:textSize="12pt"
+                android:text="A"/>
+            <RadioButton
+                android:id="@+id/large"
+                android:padding="10dp"
+                android:tag="14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:background="@drawable/tools_selector"
+                android:textSize="14pt"
+                android:text="A"/>
+            <RadioButton
+                android:id="@+id/bigLarge"
+                android:padding="10dp"
+                android:tag="16"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:button="@null"
+                android:background="@drawable/tools_selector"
+                android:textSize="16pt"
+                android:text="A"/>
+        </RadioGroup>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/id_txt_content"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left|top"
+        android:minLines="5"
+        android:singleLine="false"/>
+
+    <Button
+        android:id="@+id/id_sure_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_gravity="center_horizontal"
+
+        android:text="Save" />
+
+</LinearLayout>

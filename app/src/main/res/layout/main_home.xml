@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <TextView
+        android:id="@+id/title"
+        android:background="@android:drawable/editbox_background"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="麻昭高速公路"
+        android:padding="10dp"
+        android:textSize="10pt"
+        android:drawableRight="@android:drawable/arrow_down_float"/>
+    <com.atide.ui.XListView
+        android:layout_marginTop="10dp"
+        android:id="@+id/dataListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/white"
+        android:dividerHeight="5dp"
+        android:background="@android:color/darker_gray">
+
+    </com.atide.ui.XListView>
+
+</LinearLayout>

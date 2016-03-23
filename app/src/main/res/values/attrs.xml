@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="Circle_View_style">
+
+        <attr name="circle_color" format="reference|color"></attr>
+
+    </declare-styleable>
+
+</resources>

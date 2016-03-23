@@ -1,2 +1,0 @@
-# bim
-photoView画图
