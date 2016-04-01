@@ -4,11 +4,11 @@
     android:layout_height="match_parent" >
 
 
-    <uk.co.senab.photoview.LayerView
+    <uk.co.senab.photoview.LayerView_
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/project_pictrue"/>
+        />
 
     <include
         layout="@layout/picture_tools_popup"
@@ -17,5 +17,10 @@
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         />
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"/>
 
 </RelativeLayout>

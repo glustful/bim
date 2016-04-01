@@ -1,5 +1,7 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -43,5 +45,18 @@ public class CameraShape extends PointShape {
     @Override
     public String getName() {
         return "Camera";
+    }
+
+    @Override
+    public ContentValues getContentValue() {
+        super.getContentValue();
+        contentValues.put("markText",photoUri);
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+        photoUri = cursor.getString(cursor.getColumnIndex("markText"));
+        return super.initData(cursor);
     }
 }

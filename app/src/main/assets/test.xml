@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">
+    <soap:Header>
+        <TokenHeader xmlns="http://www.atidesoft.com/PartWebService/">
+            <InnerToken>aaaa</InnerToken>
+            <UserHost>bbbb</UserHost>
+        </TokenHeader>
+    </soap:Header>
+    <soap:Body>
+        <GetUserSects xmlns="http://www.atidesoft.com/PartWebService/">
+            <projectId>1</projectId>
+            <userId>53587</userId>
+        </GetUserSects>
+    </soap:Body>
+</soap:Envelope>

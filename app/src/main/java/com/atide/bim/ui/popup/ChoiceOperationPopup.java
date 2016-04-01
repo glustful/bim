@@ -12,6 +12,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.atide.bim.R;
+import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.Shape;
 
 import java.util.ArrayList;
@@ -53,8 +54,9 @@ public class ChoiceOperationPopup {
             LinearLayout parentView = (LinearLayout)view.findViewById(R.id.parentView);
 
                 parentView.addView(initView("删除",Operation.REMOVE));
+
             if (shape.isEdit()){
-                parentView.addView(initView("编辑",Operation.EDIT));
+                parentView.addView(initView("查看", Operation.EDIT));
             }
 
             popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

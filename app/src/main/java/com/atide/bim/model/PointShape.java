@@ -1,5 +1,7 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -9,6 +11,7 @@ import android.graphics.RectF;
 
 import com.atide.bim.MyApplication;
 import com.atide.bim.R;
+import com.atide.bim.helper.ShapeInitHelper;
 import com.atide.bim.utils.PointUtils;
 
 /**
@@ -45,4 +48,26 @@ public abstract class PointShape extends Shape {
 
     public abstract int getIcon();
 
+    @Override
+    public ContentValues getContentValue() {
+        if (contentValues != null)
+            return contentValues;
+        super.getContentValue();
+        PointF sp = PointUtils.convertOriginal(centerPoint);
+
+        contentValues.put("rang", "SP:{" + (sp.x - 20) + "," + (sp.y - 20) + "};EP:{" + (sp.x + 20) + "," + (sp.y + 20) + "}");
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+        try {
+            centerPoint = new PointF();
+            ShapeInitHelper.pointInit(cursor, centerPoint);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return super.initData(cursor);
+    }
 }

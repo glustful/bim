@@ -1,5 +1,7 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 
 import com.atide.bim.R;
@@ -43,5 +45,18 @@ public class NoticeShape extends PointShape {
     @Override
     public String getName() {
         return "Text";
+    }
+
+    @Override
+    public ContentValues getContentValue() {
+        super.getContentValue();
+        contentValues.put("markText",content);
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+        content = cursor.getString(cursor.getColumnIndex("markText"));
+        return super.initData(cursor);
     }
 }

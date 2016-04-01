@@ -23,8 +23,20 @@ import java.util.ArrayList;
 public class MainHomeAdapter extends BaseAdapter {
     private Context mContext;
     private ArrayList<ProjectModel> data;
+    private OnClickCallBack onClickCallBack;
+
+    public OnClickCallBack getOnClickCallBack() {
+        return onClickCallBack;
+    }
+
+    public void setOnClickCallBack(OnClickCallBack onClickCallBack) {
+        this.onClickCallBack = onClickCallBack;
+    }
+
+
     public MainHomeAdapter(Context context){
         this.mContext = context;
+        this.data = new ArrayList<>();
     }
     @Override
     public int getCount() {
@@ -56,7 +68,8 @@ public class MainHomeAdapter extends BaseAdapter {
     }
 
     public void reload(ArrayList<ProjectModel> models){
-        this.data = models;
+        this.data.clear();
+        this.data.addAll(models);
         notifyDataSetChanged();
     }
 
@@ -72,21 +85,34 @@ public class MainHomeAdapter extends BaseAdapter {
             title.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    MainActivity_.intent(mContext).start();
+                    if (onClickCallBack != null){
+                        onClickCallBack.callBack((ProjectModel)photo.getTag());
+                    }
                 }
             });
             photo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PictureListActivity_.intent(mContext).start();
+                    if (onClickCallBack != null){
+                        onClickCallBack.imageCallBack((ProjectModel)photo.getTag());
+                    }
                 }
             });
         }
 
         public void initData(ProjectModel model){
-            photoCount.setText(String.valueOf(model.getPhotoCount()));
+            if (model.getImageNums()==null || model.getImageNums().equals("")){
+                photoCount.setVisibility(View.GONE);
+                //photo.setVisibility(View.GONE);
+            }
+            photoCount.setText(model.getImageNums());
             title.setText(model.getTitle());
             photo.setTag(model);
         }
+    }
+
+    public static interface OnClickCallBack{
+        void callBack(ProjectModel model);
+        void imageCallBack(ProjectModel model);
     }
 }

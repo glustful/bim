@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:id="@+id/rl"
     android:gravity="center_vertical"
     android:background="@color/main_action_bar_red_solid">
@@ -15,17 +15,6 @@
         android:background="@android:color/transparent"
         android:drawableLeft="@android:drawable/ic_media_previous" />
 
-
-    <Button
-        android:id="@+id/titleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:background="@android:color/transparent"
-        android:drawablePadding="5dp"
-        android:textColor="@android:color/white"
-        android:textSize="20sp"/>
-
     <Button
         android:layout_centerVertical="true"
         android:layout_marginRight="15dp"
@@ -36,6 +25,25 @@
         android:background="@android:color/transparent"
         android:textColor="@android:color/white"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:text="足迹"
+        />
+    <TextView
+        android:gravity="center"
+        android:id="@+id/titleBtn"
+        android:layout_toLeftOf="@id/rightBtn"
+        android:layout_toRightOf="@id/leftBtn"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@android:color/transparent"
+        android:text="鼓楼蛙鸣蝉噪进时李昌奎路易十四啡奋进呖蝇"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:layout_centerInParent="true"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"/>
+
+
 
 </RelativeLayout>

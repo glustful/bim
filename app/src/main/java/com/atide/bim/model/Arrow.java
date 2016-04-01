@@ -1,11 +1,17 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.content.ReceiverCallNotAllowedException;
+import android.database.Cursor;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import com.atide.bim.entity.GlobalEntity;
+import com.atide.bim.helper.ShapeInitHelper;
 import com.atide.bim.utils.PointUtils;
 
 /**
@@ -61,8 +67,8 @@ public class Arrow extends Shape{
         float sy = start.y;
         float ex = end.x;
         float ey = end.y;
-        double H = 36*myPaint.getStrokeWidth()/5; // 箭头高度
-        double L = 16*myPaint.getStrokeWidth()/5; // 底边的一半
+        double H = 4*myPaint.getStrokeWidth(); // 箭头高度
+        double L = 2*myPaint.getStrokeWidth(); // 底边的一半
         int x3 = 0;
         int y3 = 0;
         int x4 = 0;
@@ -134,5 +140,29 @@ public class Arrow extends Shape{
     @Override
     public String getName() {
         return "Arrow";
+    }
+
+    @Override
+    public ContentValues getContentValue() {
+        if (contentValues != null)
+            return contentValues;
+        super.getContentValue();
+        PointF sp = PointUtils.convertOriginal(startP);
+        PointF ep = PointUtils.convertOriginal(endP);
+        contentValues.put("rang", "SP:{" + sp.x + "," + sp.y + "};EP:{" + ep.x + "," + ep.y + "};LW:5");
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+        try {
+            startP = new PointF();
+            endP = new PointF();
+            ShapeInitHelper.rectInit(cursor,startP,endP);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return super.initData(cursor);
     }
 }

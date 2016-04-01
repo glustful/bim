@@ -46,7 +46,6 @@ public class LayerViewTouchHelper {
         switch (shapeType) {
             case CAMERA:
                 cameraEvent(ev);
-
                 break;
             case LINE:
                 lineEvent(new Line(),ev);

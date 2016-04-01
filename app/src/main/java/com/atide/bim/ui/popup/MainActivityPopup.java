@@ -8,12 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.PopupWindow;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.atide.bim.R;
 import com.atide.bim.actionbar.MainActionBarActivity;
+import com.atide.bim.model.ProjectModel;
 import com.atide.bim.ui.home.MainActivity;
 import com.atide.ui.XListView;
+
+import java.util.ArrayList;
 
 /**
  * Created by atide on 2016/3/17.
@@ -22,6 +28,7 @@ public class MainActivityPopup {
     private Context mContext;
     private PopupWindow popupWindow;
     private MainActivity.ContentChangeListener listener;
+    private ArrayList<ProjectModel> projectModels;
     public MainActivityPopup(Context context){
         this.mContext = context;
     }
@@ -39,7 +46,7 @@ public class MainActivityPopup {
                     popupWindow.dismiss();
                     popupWindow = null;
                     if (listener != null) {
-                        listener.contentChange(parent.getItemAtPosition(position).toString());
+                        listener.contentChange(projectModels.get(position-1));
                     }
                 }
             });
@@ -58,16 +65,45 @@ public class MainActivityPopup {
     }
 
     private void constructAdapter(XListView listView){
-        String[] data = new String[30];
-        for (int i = 0;i<30;i++){
-            data[i] = "xxxx项目"+i;
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(mContext,android.R.layout.simple_list_item_1,android.R.id.text1,data);
-        listView.setAdapter(adapter);
+
+
+        listView.setAdapter(new DataAdapter());
     }
 
     public MainActivityPopup setContentChangeListener(MainActivity.ContentChangeListener listener){
         this.listener = listener;
         return this;
+    }
+
+    public MainActivityPopup setContent(ArrayList<ProjectModel> models){
+        this.projectModels = models;
+        return this;
+    }
+
+    class DataAdapter extends BaseAdapter{
+        @Override
+        public int getCount() {
+            return projectModels==null?0:projectModels.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return position;
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView==null){
+                convertView = LayoutInflater.from(mContext).inflate(android.R.layout.simple_list_item_1,null);
+            }
+            TextView title = (TextView)convertView.findViewById(android.R.id.text1);
+            title.setText(projectModels.get(position).getTitle());
+            return convertView;
+        }
     }
 }

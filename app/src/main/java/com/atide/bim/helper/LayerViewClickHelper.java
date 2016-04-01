@@ -51,7 +51,9 @@ public class LayerViewClickHelper {
                 @Override
                 public void itemClick(ChoiceOperationPopup.Operation operation) {
                     if (operation == ChoiceOperationPopup.Operation.REMOVE) {
-                        shapes.remove(checkedShaps.get(0));
+                        if (shapes.remove(checkedShaps.get(0))){
+                            mLayerView.addDeleteShape(checkedShaps.get(0));
+                        }
                         mLayerView.invalidate();
                     }
                     else{
@@ -67,6 +69,7 @@ public class LayerViewClickHelper {
                         @Override
                         public void itemClick(ChoiceOperationPopup.Operation operation) {
                             if (operation == ChoiceOperationPopup.Operation.REMOVE) {
+                                mLayerView.addDeleteShape(shape);
                                 shapes.remove(shape);
                                 mLayerView.invalidate();
                             } else {

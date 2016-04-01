@@ -15,45 +15,69 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import com.atide.bim.MyApplication;
 import com.atide.bim.R;
+import com.atide.bim.actionbar.MainActionBarActivity;
+import com.atide.bim.entity.GlobalEntity;
 import com.atide.bim.helper.LayerViewClickHelper;
+import com.atide.bim.helper.RequestImageMarkHelper;
+import com.atide.bim.helper.SaveMarkHelper;
 import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.NoticeShape;
 import com.atide.bim.model.Shape;
+import com.atide.bim.model.User;
 import com.atide.bim.ui.CircleView;
 import com.atide.bim.ui.dialog.NoticeEditDailog_;
 import com.atide.bim.ui.popup.ChoiceShapePopup;
 import com.atide.bim.ui.popup.ColorPickerPopup;
+import com.atide.bim.ui.popup.HistoryVistorPopup;
 import com.atide.bim.ui.popup.ToolsPopup;
+import com.atide.bim.utils.WebServiceUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.assist.ImageSize;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.CheckedChange;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import uk.co.senab.photoview.LayerView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 @EActivity(R.layout.image_detail_pager)
-public class PictureDetailActivity extends Activity {
+public class PictureDetailActivity extends MainActionBarActivity {
 
 	private PhotoViewAttacher mAttacher;
 	private String capturePath;
 	private Context mContext;
 	private CompoundButton checkedBox;
+	private static PictureDetailActivity instance;
 	private LayerViewClickHelper layerViewClickHelper;
+	@Bean
+	RequestImageMarkHelper requestImageMarkHelper;
+	@Extra
+	String partNo;
+	@Extra
+	String imageKey;
+	@Extra
+	String imageName;
 	@ViewById(R.id.image)
 	LayerView mImageView;
+	@ViewById
+	ProgressBar loadingBar;
 
 	@Click(R.id.colorPicker)
 	void colorPicker(final View view){
@@ -115,6 +139,7 @@ public class PictureDetailActivity extends Activity {
 				mAttacher.setAllowHandController(false);
 				break;
 		}
+		new HistoryVistorPopup(mContext).setIsThemeData(true).showPopupWindow(button);
 
 	}
 
@@ -129,6 +154,8 @@ public class PictureDetailActivity extends Activity {
 	@AfterViews
 	void initUI(){
 		mContext = this;
+		instance = this;
+		GlobalEntity.getInstance().setImageId(imageKey);
 		mAttacher = new PhotoViewAttacher(mImageView);
 		layerViewClickHelper = new LayerViewClickHelper(mImageView);
 		mImageView.setAttacher(mAttacher);
@@ -136,20 +163,38 @@ public class PictureDetailActivity extends Activity {
 		mAttacher.setOnPhotoTapListener(new PhotoViewAttacher.OnPhotoTapListener() {
 			@Override
 			public void onPhotoTap(View view, float x, float y) {
-				layerViewClickHelper.clickEvent(x,y);
+				layerViewClickHelper.clickEvent(x, y);
 			}
 		});
 
 		mAttacher.setAllowHandController(false);
-		//mImageView.setImageResource(R.drawable.project_pictrue);
-		ImageLoader.getInstance().displayImage("http://pic41.nipic.com/20140521/2531170_143935854000_2.jpg", mImageView, new SimpleImageLoadingListener() {
+		loadingBar.setVisibility(View.VISIBLE);
+		requestImageMarkHelper.getImageMarkInfoEntities(new RequestImageMarkHelper.RequestMarkFinish() {
+			@Override
+			public void finish() {
+				loadImage();
+			}
+		});
+
+
+	}
+
+	private void loadImage(){
+		HashMap<String,String> param = new HashMap<>();
+		param.put("partKey", partNo);
+		param.put("imageKey", imageKey);
+		HashMap<String,String> header = new HashMap<>();
+		header.put("InnerToken", User.getLoginUser().getToken());
+		header.put("UserHost", WebServiceUtils.getLocalIpAddress());
+		ImageLoader.getInstance().displayImage("http://www.atidesoft.com/DrawingMarkService/", "GetDrawingImageNote", "http://220.164.192.83:9300/Services/DrawingMarkService.asmx", "TokenHeader", param, header, mImageView, MyApplication.getOptions(), null, new SimpleImageLoadingListener() {
 			@Override
 			public void onLoadingStarted(String imageUri, View view) {
-				//progressBar.setVisibility(View.VISIBLE);
+
 			}
 
 			@Override
 			public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+				loadingBar.setVisibility(View.GONE);
 				String message = null;
 				switch (failReason.getType()) {
 					case IO_ERROR:
@@ -173,16 +218,25 @@ public class PictureDetailActivity extends Activity {
 
 			@Override
 			public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-				//progressBar.setVisibility(View.GONE);
+				loadingBar.setVisibility(View.GONE);
 				mAttacher.update();
+				Object tag = view.getTag(R.id.image_loader_photo_size);
+				if(tag instanceof ImageSize){
+					ImageSize size = (ImageSize)tag;
+					GlobalEntity.getInstance().setWidth(size.getWidth());
+					GlobalEntity.getInstance().setHeight(size.getHeight());
+					new SaveMarkHelper().read(mImageView);
+				}
+
+
+
 			}
-		});
+		}, null);
 	}
 
 
 
 	private void takePhoto(){
-
 		mAttacher.setType(Shape.ShapeType.CAMERA);
 		mAttacher.setImageCallBack(new ImageCallBack() {
 			public void callBack() {
@@ -191,7 +245,7 @@ public class PictureDetailActivity extends Activity {
 
 				{
 					Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-					String out_file_path = Environment.getExternalStorageDirectory()+"/"+getPackageName()+"/";
+					String out_file_path = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/";
 					File dir = new File(out_file_path);
 					if (!dir.exists()) {
 						dir.mkdirs();
@@ -224,6 +278,20 @@ public class PictureDetailActivity extends Activity {
 			PictureSureActivity_.intent(this).photoUri(capturePath).start();
 
 		}
+	}
+
+	public static PictureDetailActivity getInstance(){
+		return instance;
+	}
+
+	@Override
+	public String fetchTitle() {
+		return imageName;
+	}
+
+	@Override
+	public Activity fetchClass() {
+		return this;
 	}
 
 	public static interface ImageCallBack{

@@ -3,24 +3,34 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
+
     <TextView
         android:id="@+id/title"
         android:background="@android:drawable/editbox_background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="麻昭高速公路"
+        android:text=""
         android:padding="10dp"
         android:textSize="10pt"
         android:drawableRight="@android:drawable/arrow_down_float"/>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <com.atide.ui.XListView
         android:layout_marginTop="10dp"
         android:id="@+id/dataListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:cacheColorHint="@android:color/white"
         android:dividerHeight="5dp"
         android:background="@android:color/darker_gray">
 
     </com.atide.ui.XListView>
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center"/>
+    </FrameLayout>
 
 </LinearLayout>

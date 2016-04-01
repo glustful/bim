@@ -4,6 +4,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -28,16 +31,38 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.atide.bim.model.User;
+import com.atide.bim.request.DrawingMarkServiceRequest;
+import com.atide.bim.request.PrimaryKeyServiceRequest;
 import com.atide.bim.ui.home.MainActivity_;
+import com.atide.bim.utils.WebServiceUtils;
 import com.atide.utils.net.webservice.WsRequest;
 import com.atide.utils.net.webservice.WsResponseMessage;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.download.ByteDownloader;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
+
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
+import org.ksoap2.SoapEnvelope;
+import org.ksoap2.serialization.SoapObject;
+import org.ksoap2.serialization.SoapSerializationEnvelope;
+import org.ksoap2.transport.HttpTransportSE;
+import org.kxml2.kdom.Element;
+import org.kxml2.kdom.Node;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -56,6 +81,7 @@ public class LoginActivity extends AppCompatActivity  {
 
     @AfterViews
     void initUI(){
+
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
 
 
@@ -70,7 +96,8 @@ public class LoginActivity extends AppCompatActivity  {
                 return false;
             }
         });
-
+        mEmailView.setText("cpblb");
+        mPasswordView.setText("cpblb123");
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -128,20 +155,29 @@ public class LoginActivity extends AppCompatActivity  {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
             new WsRequest(){
                 @Override
                 public void onResponse(WsResponseMessage msg) {
-                    Log.d("tag","msg="+msg.mData);
+                    showProgress(false);
+                   if (WebServiceUtils.getResponseData(LoginActivity.this,msg)){
+                       User.getLoginUser().init(msg.mData);
+                       MainActivity_.intent(LoginActivity.this).start();
+                       finish();
+                   }
+
                 }
             }.setHost("http://220.164.192.83:9300")
+                    .setFlag(true)
                 .setUrl("/Services/AuthenticateService.asmx")
                 .setNameSpace("http://www.atidesoft.com/AuthenticateService/")
                 .setMethodName("Login")
                 .addParam("regName","cpblb")
-                    .addParam("pwd","cpblb123")
+                    .addParam("pwd", "cpblb123")
                 .notifyRequest();
         }
     }
+
 
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic

@@ -2,18 +2,21 @@ package com.atide.bim.ui.home;
 
 
 import android.app.Activity;
-import android.util.Log;
+import android.content.Context;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.atide.bim.MyApplication;
 import com.atide.bim.R;
-import com.atide.bim.actionbar.MainActionBarActivity;
+import com.atide.bim.entity.GlobalEntity;
+import com.atide.bim.helper.SaveMarkHelper;
 import com.atide.bim.model.ProjectModel;
-import com.atide.bim.sqlite.DatabaseManager;
+import com.atide.bim.model.User;
+import com.atide.bim.request.PartWebServiceRequest;
 import com.atide.bim.ui.popup.MainActivityPopup;
+import com.atide.bim.utils.WebServiceUtils;
 import com.atide.ui.XListView;
 import com.atide.utils.net.webservice.WsRequest;
 import com.atide.utils.net.webservice.WsResponseMessage;
@@ -24,12 +27,17 @@ import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.EBean;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 
 /**
  * Created by atide on 2016/3/17.
@@ -38,21 +46,34 @@ import java.util.Collections;
 public class MainActivity extends Activity implements XListView.IXListViewListener{
 
     private PopupWindow popupWindow;
+    private Context mContext;
+    private ArrayList<ProjectModel> projectModels;
+    private ArrayList<ProjectModel> sectModels;
+    private ProjectModel currentProjectModel;
     @Bean
     MainHomeAdapter adapter;
+    @Bean
+    SaveMarkHelper saveMarkHelper;
     @ViewById(R.id.dataListView)
     XListView mXListView;
     @ViewById(R.id.title)
     TextView title;
+    @ViewById
+    ProgressBar loadingBar;
 
     @Click(R.id.title)
     void changeProject(View view){
-       // DatabaseManager.getInstance().openDatabase();
-        new MainActivityPopup(this).setContentChangeListener(new ContentChangeListener(){
+
+        new MainActivityPopup(this).setContent(projectModels).setContentChangeListener(new ContentChangeListener() {
             @Override
-            public void contentChange(String content) {
-                title.setText(content);
-                adapter.reload(initData());
+            public void contentChange(ProjectModel content) {
+                if (content == currentProjectModel){
+                    return;
+                }
+                title.setText(content.getTitle());
+                loadingBar.setVisibility(View.VISIBLE);
+               getUserSects(content.get_id());
+
             }
         }).showPopupWindow(view);
     }
@@ -60,42 +81,74 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
 
     @AfterViews
     void initUI(){
+        mContext = this;
         mXListView.setXListViewListener(this);
-
-       // ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.main_home_item,R.id.title,data);
+        mXListView.setPullRefreshEnable(false);
+        mXListView.setPullLoadEnable(false);
         mXListView.setAdapter(adapter);
-        adapter.reload(initData());
-        testWebService();
+        adapter.setOnClickCallBack(new MainHomeAdapter.OnClickCallBack() {
+            @Override
+            public void callBack(ProjectModel model) {
+                GlobalEntity.getInstance().setSectId(model.get_id());
+                SecondHomeActivity_.intent(mContext).methodName("GetSectChildParts").paramKey("sectNo").projectModel(model).start();
+            }
+
+            @Override
+            public void imageCallBack(ProjectModel model) {
+
+            }
+        });
+        getUserProjects();
+        saveMarkHelper.saveMarkInfos();
     }
 
-    private ArrayList<ProjectModel> initData(){
-        ArrayList<ProjectModel> data = new ArrayList<ProjectModel>();
-        for (int i = 0;i<30;i++){
-            ProjectModel model = new ProjectModel();
-            model.setTitle(title.getText().toString()+"---"+i);
-            model.setPhotoCount(i);
-            data.add(model);
-        }
-        return data;
-    }
+
     @Override
     public void onRefresh() {
-       delay();
+
     }
 
     @Override
     public void onLoadMore() {
-        delay();
+
     }
 
+    /**
+     * 初始化顶部菜单项
+     */
     @Background
-    void delay(){
+    void delay(JSONArray array){
         try {
-            Thread.sleep(1000);
-        }catch (InterruptedException e){
+
+           if( projectModels == null){
+                projectModels = new ArrayList<>();
+            }
+            projectModels.clear();
+            for(int i=0;i<array.length();i++){
+                ProjectModel model = new ProjectModel();
+                model.set_id(array.optJSONObject(i).optString("prjid"));
+                model.setTitle(array.optJSONObject(i).optString("prjname"));
+                model.setDescript(array.optJSONObject(i).toString());
+                if (i==0){
+                    currentProjectModel = model;
+                }
+                projectModels.add(model);
+            }
+        }catch (Exception e){
 
         }
-        completeLoad();
+
+    }
+
+    @UiThread
+    void cleanUi(){
+        title.setText("");
+
+        if (projectModels!=null)
+        projectModels.clear();
+        if (sectModels != null)
+        sectModels.clear();
+        adapter.reload(sectModels);
     }
 
     @UiThread
@@ -105,21 +158,106 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
         mXListView.setRefreshTime("刚刚");
     }
 
-    private void testWebService(){
-        new WsRequest(){
+    @Override
+    protected void onDestroy() {
+        MyApplication.getInstance().getHistory().clear();
+        super.onDestroy();
+    }
+
+    /**
+     * 加载顶部数据
+     */
+    private void getUserProjects(){
+        loadingBar.setVisibility(View.VISIBLE);
+        new PartWebServiceRequest(new WsRequest() {
             @Override
             public void onResponse(WsResponseMessage msg) {
-                Log.d("response","response="+msg.mData);
+                if (WebServiceUtils.getResponseData(mContext,msg)){
+                    try {
+                        JSONArray array = new JSONObject(msg.mData).optJSONArray("data");
+                        if (array == null || array.length()<1){
+                            cleanUi();
+                            return;
+                        }
+                        delay(array);
+                        JSONObject obj = array.optJSONObject(0);
+                        title.setText(obj.optString("prjname"));
+
+
+                        getUserSects(obj.optString("prjid"));
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
             }
-        }.setHost("http://220.164.192.83:9300")
-        .setUrl("/Services/PartWebService.asmx")
-        .setNameSpace("http://www.atidesoft.com/PartWebService/")
-        .setMethodName("GetUserSects")
-        .addParam("userId","1")
-        .notifyRequest();
+        }).addParam("userId", User.getLoginUser().getUserId())
+                .setMethodName("GetUserProjects")
+                .request();
+    }
+
+    /**
+     * 加载对应顶部数据
+     * @param parentId
+     */
+    private void getUserSects(String parentId){
+        MyApplication.getInstance().addHistoryVistor(initHistory(),0);
+        new PartWebServiceRequest(new WsRequest(){
+            @Override
+            public void onResponse(WsResponseMessage msg) {
+                loadingBar.setVisibility(View.GONE);
+                if(WebServiceUtils.getResponseData(mContext,msg)){
+                    initAdapter(msg.mData);
+                }
+
+            }
+        })
+                .setMethodName("GetUserSects")
+                .addParam("userId", User.getLoginUser().getUserId())
+                .addParam("projectId", parentId).request();
+
+
+    }
+
+    private HashMap<String,Object> initHistory(){
+        HashMap<String,Object> item = new HashMap<>();
+        item.put("activity",MainActivity_.class);
+        item.put("title",title.getText().toString());
+        return item;
+    }
+
+    /**
+     * 初始化listview适配器
+     * @param data
+     */
+    private void initAdapter(String data){
+        try {
+            JSONArray array = new JSONObject(data).optJSONArray("data");
+            if (array==null || array.length()<1){
+
+                if (sectModels != null)
+                    sectModels.clear();
+                adapter.reload(sectModels);
+                return;
+            }
+            if( sectModels == null){
+                sectModels = new ArrayList<>();
+            }
+            sectModels.clear();
+            for (int i=0;i<array.length();i++){
+                ProjectModel model = new ProjectModel();
+                model.set_id(array.optJSONObject(i).optString("sectid"));
+                model.setTitle(array.optJSONObject(i).optString("sectname"));
+                model.setDescript(array.optJSONObject(i).toString());
+                sectModels.add(model);
+            }
+            adapter.reload(sectModels);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     public static interface ContentChangeListener{
-        void contentChange(String content);
+        void contentChange(ProjectModel content);
     }
+
 }

@@ -1,11 +1,14 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import com.atide.bim.helper.ShapeInitHelper;
 import com.atide.bim.utils.PointUtils;
 
 import java.util.ArrayList;
@@ -58,5 +61,38 @@ public class Line extends Shape {
     @Override
     public String getName() {
         return "Line";
+    }
+
+    @Override
+    public ContentValues getContentValue() {
+        if (contentValues != null)
+            return contentValues;
+        super.getContentValue();
+        String range = "P:";
+        for (PointF pointF : dots){
+            PointF pointF1 = PointUtils.convertOriginal(pointF);
+            range += "{" + pointF1.x + "," + pointF1.y + "}@";
+        }
+        range = range.substring(0,range.length()-1);
+        range += ";LW:5";
+
+        contentValues.put("rang", range);
+
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+
+        try {
+            if (dots == null)
+               dots = new ArrayList<>();
+            dots.clear();
+            ShapeInitHelper.lineInit(cursor,dots);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+        return super.initData(cursor);
     }
 }

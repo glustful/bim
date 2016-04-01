@@ -10,9 +10,9 @@ import android.graphics.RectF;
 public class Brush extends Line {
     @Override
     public void draw(Canvas myCanvas, Paint myPaint, RectF displayRect) {
-        super.draw(myCanvas,myPaint,displayRect);
+
         float width = myPaint.getStrokeWidth();
-        myPaint.setStrokeWidth(6*width);
+        myPaint.setStrokeWidth(5*width);
         super.draw(myCanvas, myPaint, displayRect);
         myPaint.setStrokeWidth(width);
     }

@@ -12,14 +12,18 @@ import android.widget.TextView;
 
 import com.atide.bim.MyApplication;
 import com.atide.bim.R;
+import com.atide.bim.model.PartImageModel;
 import com.atide.bim.model.ProjectModel;
 
+import com.atide.bim.model.User;
+import com.atide.bim.utils.WebServiceUtils;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.androidannotations.annotations.EBean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by atide on 2016/3/18.
@@ -27,9 +31,13 @@ import java.util.ArrayList;
 @EBean
 public class PictureListAdapter extends BaseAdapter {
     private Context mContext;
-    private ArrayList<ProjectModel> data;
+    private ArrayList<PartImageModel> data;
+    private String partNo;
     public PictureListAdapter(Context context){
         this.mContext = context;
+    }
+    public void setPartNo(String partNo){
+        this.partNo = partNo;
     }
     @Override
     public int getCount() {
@@ -60,36 +68,43 @@ public class PictureListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void reload(ArrayList<ProjectModel> models){
+    public void reload(ArrayList<PartImageModel> models){
         this.data = models;
         notifyDataSetChanged();
     }
 
     class ViewHolder{
-       // TextView photoCount;
+
         TextView title;
         ImageView pictrue;
 
+
         public ViewHolder(View view){
-           // photoCount = (TextView)view.findViewById(R.id.count);
+
             title = (TextView)view.findViewById(R.id.title);
             pictrue = (ImageView)view.findViewById(R.id.picture);
 
             pictrue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PictureDetailActivity_.intent(mContext).start();
+                    PictureDetailActivity_.intent(mContext).partNo(partNo).imageKey(((PartImageModel)v.getTag()).getId()).start();
                 }
             });
         }
 
-        public void initData(ProjectModel model){
-           // photoCount.setText(String.valueOf(model.getPhotoCount()));
-            title.setText(model.getTitle());
+        public void initData(PartImageModel model){
+
+            title.setText(model.getName());
             pictrue.setTag(model);
-           // pictrue.setImageResource(R.drawable.project_pictrue);
-            ImageLoader.getInstance().displayImage(model.getDescript(),pictrue, MyApplication.getOptions());
-           // pictrue.setImageURI(Uri.parse(model.getDescript()));
+            HashMap<String,String> param = new HashMap<>();
+            param.put("partKey", partNo);
+            param.put("imageKey", model.getId());
+            HashMap<String,String> header = new HashMap<>();
+            header.put("InnerToken", User.getLoginUser().getToken());
+            header.put("UserHost", WebServiceUtils.getLocalIpAddress());
+            ImageLoader.getInstance().displayImage("http://www.atidesoft.com/DrawingMarkService/", "GetDrawingImageNote", "http://220.164.192.83:9300/Services/DrawingMarkService.asmx", "TokenHeader", param, header, pictrue, MyApplication.getOptions());
+
         }
+
     }
 }

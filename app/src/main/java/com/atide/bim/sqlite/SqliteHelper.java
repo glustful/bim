@@ -15,6 +15,7 @@ import static android.os.Environment.*;
  */
 public class SqliteHelper extends SQLiteOpenHelper{
     private static SqliteHelper mInstance;
+    public static final String TABLE_NAME = "notice";
     public static final String DB_DIR = getExternalStorageDirectory().getPath()
             + File.separator + "AppData" + File.separator
             + SqliteHelper.class.getPackage().getName();
@@ -27,10 +28,10 @@ public class SqliteHelper extends SQLiteOpenHelper{
         }
     }
 
-    private String tableSql = "create table IF NOT EXISTS  notice(_id integer primary key autoincrement,typeId int not null,sheetId int not null,engineeringId int not null,sectionId int not null,rang text,color text,createDate text,upload boolean)";
+    private String tableSql = "create table IF NOT EXISTS  "+ TABLE_NAME + "(_id integer primary key autoincrement,markId int,markTypeId int not null,partId int not null,sectId int not null,imageId int not null,themeTypeId int,rang text,markText text,color text,addUser text,boundingBox text,createDate text,upload boolean)";
 
     public SqliteHelper(Context context){
-        super(context,DB_DIR+File.separator+"bim.db",null,1);
+        super(context,"bim.db",null,1);
 
 
     }

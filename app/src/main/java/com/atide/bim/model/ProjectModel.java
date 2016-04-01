@@ -1,14 +1,25 @@
 package com.atide.bim.model;
 
+import java.io.Serializable;
+
 /**
  * Created by atide on 2016/3/18.
  */
-public class ProjectModel {
+public class ProjectModel implements Serializable{
     private String title;
     private String descript;
     private boolean hasChild;
     private int photoCount;
-    private int _id;
+    private String _id;
+    private String imageNums;
+
+    public String getImageNums() {
+        return imageNums;
+    }
+
+    public void setImageNums(String imageNums) {
+        this.imageNums = imageNums;
+    }
 
     public String getTitle() {
         return title;
@@ -42,11 +53,11 @@ public class ProjectModel {
         this.photoCount = photoCount;
     }
 
-    public int get_id() {
+    public String get_id() {
         return _id;
     }
 
-    public void set_id(int _id) {
+    public void set_id(String _id) {
         this._id = _id;
     }
 }

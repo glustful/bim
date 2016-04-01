@@ -1,11 +1,17 @@
 package com.atide.bim.model;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
 
+import com.atide.bim.entity.GlobalEntity;
+import com.atide.bim.helper.ShapeInitHelper;
 import com.atide.bim.utils.PointUtils;
+import com.atide.utils.TimeUtils;
 
 /**
  * Created by atide on 2016/3/21.
@@ -73,5 +79,34 @@ public abstract class RectShape extends Shape {
         return false;
     }
 
+    @Override
+    public ContentValues getContentValue() {
+        if (contentValues != null)
+            return contentValues;
+        super.getContentValue();
+        lt.x = Math.min(leftTop.x,rightBottom.x);
+        lt.y = Math.min(leftTop.y,rightBottom.y);
+        rb.x = Math.max(leftTop.x, rightBottom.x);
+        rb.y = Math.max(leftTop.y,rightBottom.y);
+        PointF sp = PointUtils.convertOriginal(lt);
+        PointF ep = PointUtils.convertOriginal(rb);
+        contentValues.put("rang","SP:{"+sp.x + "," + sp.y + "};EP:{"+ep.x + "," + ep.y + "};LW:5");
 
+        return contentValues;
+    }
+
+    @Override
+    public boolean initData(Cursor cursor) {
+
+        try {
+            leftTop = new PointF();
+            rightBottom = new PointF();
+            ShapeInitHelper.rectInit(cursor,leftTop,rightBottom);
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+
+        return super.initData(cursor);
+    }
 }

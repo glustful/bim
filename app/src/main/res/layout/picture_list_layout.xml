@@ -1,18 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     >
 
     <com.atide.ui.XListView
         android:layout_marginTop="10dp"
         android:id="@+id/dataListView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:cacheColorHint="@android:color/white"
         android:dividerHeight="5dp"
         android:background="@android:color/darker_gray">
 
     </com.atide.ui.XListView>
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerInParent="true"/>
 
-</LinearLayout>
+</RelativeLayout>

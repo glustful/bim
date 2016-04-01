@@ -10,8 +10,10 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.atide.bim.entity.ShapeEntity;
 import com.atide.bim.sqlite.DatabaseManager;
 import com.atide.bim.sqlite.SqliteHelper;
+import com.atide.bim.utils.WebServiceUtils;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
@@ -25,10 +27,13 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 
 import org.androidannotations.annotations.EApplication;
+import org.json.JSONArray;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 @EApplication
 public class MyApplication extends Application {
@@ -36,7 +41,10 @@ public class MyApplication extends Application {
 	private static MyApplication mInstance;
 	private static DisplayImageOptions mOptions;
 	private static ImageLoadingListener mLoadingListener;
+	private ArrayList<HashMap<String,Object>> historyVistor;
+	private ArrayList<HashMap<String,String>> themeDatas;
 
+	private ArrayList<ShapeEntity> shapeEntities;
 
 	/**
 	 * 获取全局Application
@@ -52,7 +60,7 @@ public class MyApplication extends Application {
 		DatabaseManager.initializeInstance(SqliteHelper.getInstance(this));
 
 		initImageLoader();
-
+		WebServiceUtils.downloadShapeInfo();
 		super.onCreate();
 	}
 
@@ -63,13 +71,14 @@ public class MyApplication extends Application {
 				.threadPriority(Thread.NORM_PRIORITY - 2).memoryCache(new WeakMemoryCache())
 				.denyCacheImageMultipleSizesInMemory().diskCacheFileNameGenerator(new Md5FileNameGenerator())
 				.diskCacheSize(100 * 1024 * 1024)
-				
+
 				// 100 Mb
 				.diskCacheFileCount(200).diskCache(new UnlimitedDiskCache(meCacheDir))// 自定义缓存路径
 				.tasksProcessingOrder(QueueProcessingType.LIFO).writeDebugLogs() // Remove for
 																					// release app
 				.build();
 		ImageLoader.getInstance().init(config);
+
 	}
 
 
@@ -145,5 +154,57 @@ public class MyApplication extends Application {
 		DisplayMetrics dm = new DisplayMetrics();
 		activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		return dm;
+	}
+
+	public ArrayList<HashMap<String ,Object>> getHistory(){
+		return historyVistor;
+	}
+
+	public void addHistoryVistor(HashMap<String,Object> item,int index){
+		if (historyVistor == null){
+			historyVistor = new ArrayList<>();
+		}
+		if (index == -1){
+			historyVistor.add(item);
+			return;
+		}
+		if (historyVistor.size()>index){
+			historyVistor.remove(index);
+		}
+
+		historyVistor.add(index, item);
+	}
+
+	public void backStack(HashMap<String,Object> item){
+		if(historyVistor.contains(item)){
+			while (true) {
+				if (historyVistor.get(historyVistor.size() - 1) != item) {
+					((Activity) historyVistor.remove(historyVistor.size() - 1).get("activity")).finish();
+				}else {
+					return;
+				}
+			}
+		}
+
+
+	}
+
+	public ArrayList<ShapeEntity> getShapeEntities() {
+		return shapeEntities;
+	}
+
+	public void setShapeEntitie(ShapeEntity shapeEntity) {
+		if (shapeEntities == null){
+			shapeEntities = new ArrayList<ShapeEntity>();
+		}
+		shapeEntities.add(shapeEntity);
+	}
+
+	public ArrayList<HashMap<String,String>> getThemeDatas() {
+		return themeDatas;
+	}
+
+	public void setThemeDatas(ArrayList themeDatas) {
+		this.themeDatas = themeDatas;
 	}
 }
