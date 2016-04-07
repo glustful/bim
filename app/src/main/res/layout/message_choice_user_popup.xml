@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    >
+    <LinearLayout
+        android:background="@android:drawable/screen_background_dark"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+        <TextView
+            android:id="@+id/cancel"
+            android:padding="10dp"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textColor="@android:color/white"
+            android:textStyle="italic"
+            />
+        <TextView
+            android:id="@+id/sure"
+            android:padding="10dp"
+            android:textStyle="italic"
+            android:gravity="right|center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:textColor="@android:color/white"
+            android:layout_height="wrap_content"
+            android:text="确定"/>
+    </LinearLayout>
+
+    <ListView
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:id="@+id/dataListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/white"
+        android:background="@android:color/holo_orange_dark"
+        android:dividerHeight="5dp"
+
+        >
+
+    </ListView>
+
+</LinearLayout>
