@@ -164,7 +164,11 @@ public class SaveMarkHelper {
 
             SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
             String sql = "select *from notice where sectId=? and partId=? and imageId=? and upload<>?";
+
             GlobalEntity entity = GlobalEntity.getInstance();
+            /*if (entity.getThemeId()!=null && !entity.getThemeId().equals("")){
+                sql += " and themeTypeId=" + entity.getThemeId();
+            }*/
             Cursor cursor = db.rawQuery(sql,new String[]{entity.getSectId(),entity.getPartId(),entity.getImageId(),"2"});
 
             if (cursor==null || cursor.getCount()<1)
@@ -247,8 +251,9 @@ public class SaveMarkHelper {
      * @param delMarkId
      */
     private void uploadMarkNote(final Cursor cursor,final String markId,String markNoteId,String delMarkId) throws Exception{
-        String json = initNoteStringFromCursor(cursor, markId, markNoteId);
-
+       String uri = cursor.getString(cursor.getColumnIndex("markText"));
+        String json = initNoteStringFromCursor(cursor, markId, markNoteId, uri);
+        String noteString = new String(Base64.encode(ImageSizeHelper.resetImageSize(uri),Base64.DEFAULT));
         WsResponseMessage msg = new DrawingMarkServiceRequest(new WsRequest() {
             @Override
             public void onResponse(WsResponseMessage msg) {
@@ -258,6 +263,7 @@ public class SaveMarkHelper {
         }).addParam("json", json)
                 .addParam("delMarkNoteIds",delMarkId)
                 .setMethodName("SaveMarkNotes")
+                .addParam("noteString",noteString)
                 .request2();
         System.out.println(cursor);
         if (msg.mCode != 200)
@@ -285,23 +291,23 @@ public class SaveMarkHelper {
         return json;
     }
 
-    private String initNoteStringFromCursor(Cursor cursor,String markId,String markNoteId) throws Exception{
-        String uri = cursor.getString(cursor.getColumnIndex("markText"));
+    private String initNoteStringFromCursor(Cursor cursor,String markId,String markNoteId,String uri) throws Exception{
+
         File file = new File(uri);
         String json = "{";
         json += "\"marknoteid\":\"" + markNoteId + "\",";
         json += "\"markinfoid\":\"" + markId + "\",";
         json += "\"drawingimageid\":\"" + cursor.getInt(cursor.getColumnIndex("imageId")) + "\",";
         json += "\"partno\":\"" + cursor.getInt(cursor.getColumnIndex("partId")) + "\",";
-        json += "\"marknote\":\"" + new String(Base64.encode(ImageSizeHelper.resetImageSize(uri),Base64.DEFAULT)) + "\",";
+        json += "\"marknote\":\"" + "" + "\",";
         json += "\"marknotethumbnail\":\"" + "" + "\",";
         json += "\"marknotesize\":\"" + file.length() + "\",";
         json += "\"thumbnailsize\":\"" + "" + "\",";
         json += "\"creationtime\":\"" + "" + "\",";
         json += "\"lastwritetime\":\"" + cursor.getString(cursor.getColumnIndex("createDate")) + "\",";
         json += "\"marknotetitle\":\"" + "现场照片.jpg" + "\",";
-        json += "\"marknotefilename\":\"" + "" + "\"}";
-        json += "\"marknoteext\":\"" + ".jpg" + "\"}";
+        json += "\"marknotefilename\":\"" + file.getName() + "\",";
+        json += "\"marknoteext\":\"" + ".jpg" + "\",";
         json += "\"marknoteremarks\":\"" + "" + "\"}";
         return json;
     }

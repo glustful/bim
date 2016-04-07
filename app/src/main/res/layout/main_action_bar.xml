@@ -6,31 +6,57 @@
     android:gravity="center_vertical"
     android:background="@color/main_action_bar_red_solid">
 
-    <Button
-        android:layout_marginLeft="15dp"
+    <TextView
+        android:padding="10dp"
+
         android:id="@+id/leftBtn"
 
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:drawableLeft="@android:drawable/ic_media_previous" />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/leftBtn"
+        android:layout_alignTop="@id/leftBtn"
+        android:orientation="horizontal"
+        android:id="@+id/right"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_alignParentRight="true">
 
-    <Button
-        android:layout_centerVertical="true"
-        android:layout_marginRight="15dp"
+    <TextView
+
+
+
+        android:paddingRight="10dp"
         android:id="@+id/rightBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+
         android:background="@android:color/transparent"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
         android:text="足迹"
+        android:textColor="@android:color/white"
+
         />
+        <TextView
+
+            android:id="@+id/rightBtn1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="工具栏"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:visibility="gone"
+            />
+    </LinearLayout>
     <TextView
         android:gravity="center"
         android:id="@+id/titleBtn"
-        android:layout_toLeftOf="@id/rightBtn"
+        android:layout_toLeftOf="@id/right"
         android:layout_toRightOf="@id/leftBtn"
 
         android:layout_width="match_parent"

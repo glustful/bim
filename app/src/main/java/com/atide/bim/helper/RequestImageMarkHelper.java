@@ -4,31 +4,24 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 
 import com.atide.bim.Constant;
-import com.atide.bim.MyApplication;
 import com.atide.bim.entity.GlobalEntity;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.request.DrawingMarkServiceRequest;
 import com.atide.bim.sqlite.DatabaseManager;
 import com.atide.bim.sqlite.SqliteHelper;
 import com.atide.bim.ui.picture.PictureSureActivity;
-import com.atide.bim.utils.TimeUtils;
-import com.atide.bim.utils.Utils;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.utils.net.webservice.WsRequest;
 import com.atide.utils.net.webservice.WsResponseMessage;
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.download.ByteDownloader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import org.androidannotations.annotations.EBean;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 /**

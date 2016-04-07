@@ -3,7 +3,9 @@ package com.atide.bim.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
+import com.atide.bim.MyApplication;
 import com.atide.bim.model.Arrow;
 import com.atide.bim.model.Brush;
 import com.atide.bim.model.CameraShape;
@@ -33,6 +35,10 @@ public class Utils {
 	public static int px2dp(Context context, float px) {
 		final float scale = context.getResources().getDisplayMetrics().density;
 		return (int) (px / scale + 0.5f);
+	}
+
+	public static void showMsg(String msg){
+		Toast.makeText(MyApplication.getInstance(),msg,Toast.LENGTH_LONG).show();
 	}
 
 	public static String getMarkTypeId(Shape shape){

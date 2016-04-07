@@ -5,4 +5,7 @@
     <color name="colorAccent">#FF4081</color>
     <color name="main_action_bar_red_solid">#d62432</color>
     <color name="tools_selected">#99aa2200</color>
+    <color name="Indigo_colorPrimaryDark">#303f9f</color>
+    <color name="Indigo_colorPrimary">#3f51b5</color>
+    <color name="Indigo_nav_color">#4675FF</color>
 </resources>

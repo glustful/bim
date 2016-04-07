@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.PointF;
 
+import com.atide.bim.entity.GlobalEntity;
 import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.NoticeShape;
 import com.atide.bim.model.Shape;
@@ -36,11 +37,12 @@ public class LayerViewClickHelper {
 
         final ArrayList<Shape> checkedShaps = new ArrayList<>();
         for (Shape shape : shapes) {
+            if (shape.getThemeTypeId().equals(GlobalEntity.getInstance().getThemeId())) {
+                if (shape.isChecked(new PointF(x, y))) {
 
-            if (shape.isChecked(new PointF(x,y))){
+                    checkedShaps.add(shape);
 
-                checkedShaps.add(shape);
-
+                }
             }
         }
         if (checkedShaps.size()==0)

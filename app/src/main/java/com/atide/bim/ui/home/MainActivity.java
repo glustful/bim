@@ -12,9 +12,11 @@ import com.atide.bim.MyApplication;
 import com.atide.bim.R;
 import com.atide.bim.entity.GlobalEntity;
 import com.atide.bim.helper.SaveMarkHelper;
-import com.atide.bim.model.ProjectModel;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.ProjectModel;
+import com.atide.bim.entity.User;
 import com.atide.bim.request.PartWebServiceRequest;
+import com.atide.bim.ui.input.InputDataActivity;
+import com.atide.bim.ui.input.InputDataActivity_;
 import com.atide.bim.ui.popup.MainActivityPopup;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.ui.XListView;
@@ -26,16 +28,11 @@ import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.EBean;
-import org.androidannotations.annotations.Extra;
-import org.androidannotations.annotations.ItemClick;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -95,7 +92,7 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
 
             @Override
             public void imageCallBack(ProjectModel model) {
-
+                InputDataActivity_.intent(mContext).start();
             }
         });
         getUserProjects();

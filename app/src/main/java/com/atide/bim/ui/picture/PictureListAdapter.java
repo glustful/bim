@@ -1,23 +1,19 @@
 package com.atide.bim.ui.picture;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.atide.bim.MyApplication;
 import com.atide.bim.R;
-import com.atide.bim.model.PartImageModel;
-import com.atide.bim.model.ProjectModel;
+import com.atide.bim.entity.PartImageModel;
 
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.utils.WebServiceUtils;
-import com.facebook.drawee.view.SimpleDraweeView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.androidannotations.annotations.EBean;
@@ -87,7 +83,7 @@ public class PictureListAdapter extends BaseAdapter {
             pictrue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PictureDetailActivity_.intent(mContext).partNo(partNo).imageKey(((PartImageModel)v.getTag()).getId()).start();
+                    PictureDetailActivity_.intent(mContext).partNo(partNo).imageName(((PartImageModel)v.getTag()).getName()).imageKey(((PartImageModel) v.getTag()).getId()).start();
                 }
             });
         }

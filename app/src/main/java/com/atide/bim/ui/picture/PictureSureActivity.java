@@ -15,7 +15,7 @@ import com.atide.bim.Constant;
 import com.atide.bim.MyApplication;
 import com.atide.bim.R;
 import com.atide.bim.helper.RequestImageMarkHelper;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.request.DrawingMarkServiceRequest;
 import com.atide.bim.utils.WebServiceUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;

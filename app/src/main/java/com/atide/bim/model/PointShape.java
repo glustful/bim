@@ -11,6 +11,7 @@ import android.graphics.RectF;
 
 import com.atide.bim.MyApplication;
 import com.atide.bim.R;
+import com.atide.bim.entity.GlobalEntity;
 import com.atide.bim.helper.ShapeInitHelper;
 import com.atide.bim.utils.PointUtils;
 
@@ -19,12 +20,13 @@ import com.atide.bim.utils.PointUtils;
  */
 public abstract class PointShape extends Shape {
     protected PointF centerPoint;
+    private int size;
 
     @Override
     public void draw(Canvas myCanvas, Paint myPaint, RectF displayRect) {
 
         PointF p = PointUtils.convertPF(displayRect, centerPoint);
-        int size = (int)(15*myPaint.getStrokeWidth());
+        size = (int)(15*myPaint.getStrokeWidth());
         Bitmap bitmap = Bitmap.createScaledBitmap(BitmapFactory.decodeResource(MyApplication.getInstance().getResources(), getIcon()), size, size, true);
         myCanvas.drawBitmap(bitmap,p.x-size/2,p.y-size/2,myPaint);
     }
@@ -36,7 +38,10 @@ public abstract class PointShape extends Shape {
 
     @Override
     public boolean isChecked(PointF pointF) {
-        if (Math.abs(pointF.x-centerPoint.x)<=0.01 || Math.abs(pointF.y-centerPoint.y)<=0.01)
+        float scale = size*1.0f/Math.min(GlobalEntity.getInstance().getWidth(),GlobalEntity.getInstance().getHeight());
+        float x = Math.abs(pointF.x-centerPoint.x);
+        float y = Math.abs(pointF.y-centerPoint.y);
+        if (Math.abs(pointF.x-centerPoint.x)<=scale && Math.abs(pointF.y-centerPoint.y)<=scale)
             return true;
         return false;
     }

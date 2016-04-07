@@ -9,7 +9,7 @@ import android.graphics.PointF;
 import android.graphics.RectF;
 
 import com.atide.bim.entity.GlobalEntity;
-import com.atide.bim.entity.ShapeEntity;
+import com.atide.bim.entity.User;
 import com.atide.bim.utils.TimeUtils;
 import com.atide.bim.utils.Utils;
 
@@ -33,6 +33,7 @@ public abstract  class Shape {
         try {
             set_id(cursor.getInt(cursor.getColumnIndex("_id")));
             setMarkId(cursor.getString(cursor.getColumnIndex("markId")));
+            setThemeTypeId(cursor.getInt(cursor.getColumnIndex("themeTypeId"))+"");
             String color = cursor.getString(cursor.getColumnIndex("color"));
             String[] rgb = color.split(";");
             if (rgb.length == 3) {
@@ -55,7 +56,7 @@ public abstract  class Shape {
         contentValues.put("imageId",entity.getImageId());
         contentValues.put("themeTypeId",themeTypeId);
         contentValues.put("markText","");
-        contentValues.put("addUser",User.getLoginUser().getUserId());
+        contentValues.put("addUser", User.getLoginUser().getUserId());
         contentValues.put("boundingBox","");
         contentValues.put("color",Color.red(mColor)+";" + Color.green(mColor) + ";" + Color.blue(mColor));
         contentValues.put("createDate", TimeUtils.convertToString(new Date(),"yyyy/MM/dd HH:mm:ss"));

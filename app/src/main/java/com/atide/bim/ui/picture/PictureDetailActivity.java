@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.PointF;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.View;
 
-import android.widget.CheckBox;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
-import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import com.atide.bim.MyApplication;
@@ -29,13 +27,13 @@ import com.atide.bim.helper.SaveMarkHelper;
 import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.NoticeShape;
 import com.atide.bim.model.Shape;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.ui.CircleView;
 import com.atide.bim.ui.dialog.NoticeEditDailog_;
-import com.atide.bim.ui.popup.ChoiceShapePopup;
+import com.atide.bim.ui.message.SendMessageActivity;
+import com.atide.bim.ui.message.SendMessageActivity_;
 import com.atide.bim.ui.popup.ColorPickerPopup;
 import com.atide.bim.ui.popup.HistoryVistorPopup;
-import com.atide.bim.ui.popup.ToolsPopup;
 import com.atide.bim.utils.WebServiceUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
@@ -51,7 +49,6 @@ import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import uk.co.senab.photoview.LayerView;
@@ -65,6 +62,7 @@ public class PictureDetailActivity extends MainActionBarActivity {
 	private Context mContext;
 	private CompoundButton checkedBox;
 	private static PictureDetailActivity instance;
+	private HashMap<String,String> currentTheme;
 	private LayerViewClickHelper layerViewClickHelper;
 	@Bean
 	RequestImageMarkHelper requestImageMarkHelper;
@@ -76,15 +74,22 @@ public class PictureDetailActivity extends MainActionBarActivity {
 	String imageName;
 	@ViewById(R.id.image)
 	LayerView mImageView;
+	@ViewById(R.id.tools)
+	ScrollView tools;
 	@ViewById
 	ProgressBar loadingBar;
+
+	@Click(R.id.messageSend)
+	void messageSend(){
+		SendMessageActivity_.intent(mContext).imageKey(imageKey).start();
+	}
 
 	@Click(R.id.colorPicker)
 	void colorPicker(final View view){
 		new ColorPickerPopup(this).setColorPickerListener(new ColorPickerPopup.ColorPickerListener() {
 			@Override
 			public void colorPicker(int color) {
-				((CircleView)view).setAppColor(color);
+				((CircleView) view).setAppColor(color);
 				mImageView.setPenColor(color);
 			}
 		}).showPopupWindow(view);
@@ -139,7 +144,7 @@ public class PictureDetailActivity extends MainActionBarActivity {
 				mAttacher.setAllowHandController(false);
 				break;
 		}
-		new HistoryVistorPopup(mContext).setIsThemeData(true).showPopupWindow(button);
+		//new HistoryVistorPopup(mContext).setIsThemeData(true).showPopupWindow(button);
 
 	}
 
@@ -155,6 +160,7 @@ public class PictureDetailActivity extends MainActionBarActivity {
 	void initUI(){
 		mContext = this;
 		instance = this;
+
 		GlobalEntity.getInstance().setImageId(imageKey);
 		mAttacher = new PhotoViewAttacher(mImageView);
 		layerViewClickHelper = new LayerViewClickHelper(mImageView);
@@ -221,13 +227,15 @@ public class PictureDetailActivity extends MainActionBarActivity {
 				loadingBar.setVisibility(View.GONE);
 				mAttacher.update();
 				Object tag = view.getTag(R.id.image_loader_photo_size);
-				if(tag instanceof ImageSize){
-					ImageSize size = (ImageSize)tag;
+				if (tag instanceof ImageSize) {
+					ImageSize size = (ImageSize) tag;
 					GlobalEntity.getInstance().setWidth(size.getWidth());
 					GlobalEntity.getInstance().setHeight(size.getHeight());
+					if (currentTheme != null){
+						GlobalEntity.getInstance().setThemeId(currentTheme.get("id"));
+					}
 					new SaveMarkHelper().read(mImageView);
 				}
-
 
 
 			}
@@ -285,8 +293,57 @@ public class PictureDetailActivity extends MainActionBarActivity {
 	}
 
 	@Override
+	public void setRightButtonOnClickListener() {
+		super.setRightButtonOnClickListener();
+		rightButton1.setVisibility(View.VISIBLE);
+		rightButton1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (tools.getVisibility()==View.VISIBLE){
+					Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.back_right_out);
+					tools.startAnimation(animation);
+					tools.setVisibility(View.GONE);
+				}else{
+					Animation animation = AnimationUtils.loadAnimation(mContext,R.anim.push_right_in);
+					tools.startAnimation(animation);
+					tools.setVisibility(View.VISIBLE);
+				}
+			}
+		});
+	}
+
+	@Override
+	public void setTitleButtonOnClickListener() {
+
+		titleTextView.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				new HistoryVistorPopup(mContext).setListener(new SendMessageActivity.ThemeChangeListener() {
+					@Override
+					public void themeChange(HashMap<String, String> theme) {
+						if (theme == currentTheme) {
+							return;
+						}
+						currentTheme = theme;
+						GlobalEntity.getInstance().setThemeId(theme.get("id"));
+						titleTextView.setText(currentTheme.get("name"));
+						mImageView.invalidate();
+					}
+				}).setIsThemeData(true).showPopupWindow(v);
+			}
+		});
+
+	}
+
+	@Override
 	public String fetchTitle() {
-		return imageName;
+		if (MyApplication.getInstance().getThemeDatas()==null || MyApplication.getInstance().getThemeDatas().size()<1){
+
+			return imageName;
+		}
+		currentTheme = MyApplication.getInstance().getThemeDatas().get(0);
+
+		return currentTheme.get("name");
 	}
 
 	@Override

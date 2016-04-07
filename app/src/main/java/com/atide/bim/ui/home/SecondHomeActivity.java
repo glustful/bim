@@ -3,7 +3,6 @@ package com.atide.bim.ui.home;
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
-import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,21 +10,17 @@ import android.widget.Toast;
 import com.atide.bim.R;
 import com.atide.bim.actionbar.MainActionBarActivity;
 import com.atide.bim.entity.GlobalEntity;
-import com.atide.bim.model.ProjectModel;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.ProjectModel;
 import com.atide.bim.request.DrawingMarkServiceRequest;
 import com.atide.bim.request.PartWebServiceRequest;
 import com.atide.bim.ui.picture.PictureListActivity_;
-import com.atide.bim.ui.popup.MainActivityPopup;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.ui.XListView;
 import com.atide.utils.net.webservice.WsRequest;
 import com.atide.utils.net.webservice.WsResponseMessage;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
-import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.UiThread;
@@ -34,7 +29,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by atide on 2016/3/25.

@@ -1,13 +1,9 @@
 package com.atide.bim.request;
 
-import android.util.Base64;
-import android.util.Log;
-
 import com.atide.bim.Constant;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.utils.net.webservice.WsHttpTransportSE;
-import com.atide.utils.net.webservice.WsRequest;
 
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.serialization.SoapObject;
@@ -17,7 +13,6 @@ import org.kxml2.kdom.Node;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Created by atide on 2016/3/25.

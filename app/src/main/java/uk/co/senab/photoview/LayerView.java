@@ -102,7 +102,9 @@ public class LayerView extends ImageView {
         if (mShapes!=null && mShapes.size()>0){
             displayRect = initParam(displayRect);
             for (Shape shape : mShapes){
-                shape.onDraw(canvas,pen,displayRect);
+                if (shape.getThemeTypeId().equals(GlobalEntity.getInstance().getThemeId())) {
+                    shape.onDraw(canvas, pen, displayRect);
+                }
             }
         }
     }

@@ -2,20 +2,16 @@ package com.atide.bim.ui.popup;
 
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.PopupWindow;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.atide.bim.R;
-import com.atide.bim.actionbar.MainActionBarActivity;
-import com.atide.bim.model.ProjectModel;
+import com.atide.bim.entity.ProjectModel;
 import com.atide.bim.ui.home.MainActivity;
 import com.atide.ui.XListView;
 

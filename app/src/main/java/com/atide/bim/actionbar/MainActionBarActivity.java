@@ -34,6 +34,8 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 	private LinearLayout parentLinearLayout;//把父类activity和子类activity的view都add到这里
 	private Toolbar mToolbar;
 	private HashMap<String,Object> item;
+	protected TextView rightButton,rightButton1;
+	protected TextView titleTextView;
 
 	public abstract String fetchTitle();
 	public abstract Activity fetchClass();
@@ -48,8 +50,12 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 				finish();
 			}
 		});
-		findViewById(R.id.rightBtn).setOnClickListener(historyVistor);
-		((TextView)findViewById(R.id.titleBtn)).setText(fetchTitle());
+		rightButton = (TextView)findViewById(R.id.rightBtn);
+		rightButton1 = (TextView)findViewById(R.id.rightBtn1);
+		titleTextView = ((TextView)findViewById(R.id.titleBtn));
+		titleTextView.setText(fetchTitle());
+		setRightButtonOnClickListener();
+		setTitleButtonOnClickListener();
 		MyApplication.getInstance().addHistoryVistor(initHistory(),-1);
 		/*mToolbar = (Toolbar)findViewById(R.id.toolbar);
 		mToolbar.setTitle("项目主页");
@@ -65,11 +71,11 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 		super.onDestroy();
 	}
 
-	@Override
+	/*@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_menu, menu);
 		return super.onCreateOptionsMenu(menu);
-	}
+	}*/
 
 	/**
 	 * 初始化contentview
@@ -104,6 +110,14 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 
 		parentLinearLayout.addView(view, params);
 
+	}
+
+	public void setTitleButtonOnClickListener(){
+
+	}
+
+	public void setRightButtonOnClickListener(){
+		rightButton.setOnClickListener(historyVistor);
 	}
 	private HashMap<String,Object> initHistory(){
 		item = new HashMap<>();

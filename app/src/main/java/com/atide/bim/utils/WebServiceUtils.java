@@ -3,12 +3,11 @@ package com.atide.bim.utils;
 import android.content.Context;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.atide.bim.MyApplication;
 import com.atide.bim.entity.ShapeEntity;
-import com.atide.bim.model.User;
+import com.atide.bim.entity.User;
 import com.atide.bim.request.DrawingMarkServiceRequest;
 import com.atide.utils.net.httpservice.HtResponseMessage;
 import com.atide.utils.net.webservice.WsRequest;
@@ -19,8 +18,6 @@ import com.google.gson.Gson;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.Iterator;
 
 /**
  * Created by yuan on 15-3-3.

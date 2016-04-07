@@ -9,8 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.atide.bim.R;
-import com.atide.bim.model.ProjectModel;
-import com.atide.bim.ui.picture.PictureListActivity_;
+import com.atide.bim.entity.ProjectModel;
 
 import org.androidannotations.annotations.EBean;
 
@@ -82,11 +81,11 @@ public class MainHomeAdapter extends BaseAdapter {
             photoCount = (TextView)view.findViewById(R.id.count);
             title = (TextView)view.findViewById(R.id.title);
             photo = (ImageButton)view.findViewById(R.id.bphoto);
-            title.setOnClickListener(new View.OnClickListener() {
+            view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (onClickCallBack != null){
-                        onClickCallBack.callBack((ProjectModel)photo.getTag());
+                        onClickCallBack.callBack((ProjectModel) ((ViewHolder) v.getTag()).photo.getTag());
                     }
                 }
             });
@@ -94,7 +93,7 @@ public class MainHomeAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     if (onClickCallBack != null){
-                        onClickCallBack.imageCallBack((ProjectModel)photo.getTag());
+                        onClickCallBack.imageCallBack((ProjectModel)v.getTag());
                     }
                 }
             });

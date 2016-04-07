@@ -1,5 +1,7 @@
 package com.example;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,5 +15,8 @@ public class MyClass {
         }
         String str = "122223";
         System.out.println(str.substring(0,str.length()-1));
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        System.out.println(simpleDateFormat.format(new Date(635956232915049865l)));
+
     }
 }
