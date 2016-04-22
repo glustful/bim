@@ -9,6 +9,7 @@ public class User {
 
     private String userId;
     private String token;
+    private String unitid;
 
     public String getUserId() {
         return userId;
@@ -26,6 +27,14 @@ public class User {
         this.token = token;
     }
 
+    public String getUnitid() {
+        return unitid;
+    }
+
+    public void setUnitid(String unitid) {
+        this.unitid = unitid;
+    }
+
     private static User lastUser;
     public static User getLoginUser(){
         if (lastUser == null)
@@ -41,9 +50,12 @@ public class User {
                 return;
             userId = info.optString("userid","");
             token = info.optString("token","");
+            unitid = info.optString("unitid","");
         }catch (Exception e){
             e.printStackTrace();
         }
 
     }
+
+
 }

@@ -44,7 +44,7 @@ public class NoticeShape extends PointShape {
 
     @Override
     public String getName() {
-        return "Text";
+        return "文本";
     }
 
     @Override

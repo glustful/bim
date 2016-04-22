@@ -44,7 +44,7 @@ public class CameraShape extends PointShape {
 
     @Override
     public String getName() {
-        return "Camera";
+        return "图像";
     }
 
     @Override

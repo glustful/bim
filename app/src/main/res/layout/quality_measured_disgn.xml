@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="#878787">
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+
+                android:layout_marginTop="2px"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                >
+
+
+                <TextView
+
+                    android:layout_width="50dp"
+                    android:background="@android:color/white"
+                    android:layout_height="wrap_content"
+                    android:textColor="#CD3700"
+
+                    android:padding="10dp"
+                    android:text="序号"/>
+
+
+
+                <TextView
+                    android:layout_marginLeft="2px"
+                    android:text="名称"
+                    android:layout_width="250dp"
+                    android:background="@android:color/white"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:padding="10dp"
+                    />
+
+
+                <TextView
+                    android:text="单位"
+                    android:layout_marginLeft="2px"
+                    android:layout_width="50dp"
+                    android:background="@android:color/white"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:padding="10dp"
+                    />
+
+
+
+                <TextView
+                    android:text="最小值/设计值"
+                    android:layout_marginLeft="2px"
+                    android:layout_width="150dp"
+                    android:background="@android:color/white"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    />
+
+
+
+                <TextView
+                    android:text="最大值"
+                    android:layout_marginLeft="2px"
+                    android:layout_width="100dp"
+                    android:background="@android:color/white"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    />
+
+
+                <TextView
+                    android:text="显示字符"
+                    android:layout_marginLeft="2px"
+                    android:layout_width="100dp"
+                    android:background="@android:color/white"
+                    android:padding="10dp"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    />
+
+
+
+            </LinearLayout>
+
+    <ListView
+        android:layout_weight="1"
+        android:layout_marginTop="2px"
+        android:id="@+id/horizontalListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="#878787"
+        android:dividerHeight="2px"
+        android:background="@android:color/white"></ListView>
+        </LinearLayout>
+    </HorizontalScrollView>
+    </LinearLayout>

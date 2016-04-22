@@ -139,7 +139,7 @@ public class Arrow extends Shape{
 
     @Override
     public String getName() {
-        return "Arrow";
+        return "箭头";
     }
 
     @Override

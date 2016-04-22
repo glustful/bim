@@ -133,7 +133,7 @@ public final class StorageUtils {
 			appCacheDir = new File(Environment.getExternalStorageDirectory(), cacheDir);
 		}
 		if (appCacheDir == null || (!appCacheDir.exists() && !appCacheDir.mkdirs())) {
-			appCacheDir = context.getCacheDir();
+			appCacheDir = context.getExternalCacheDir();
 		}
 		return appCacheDir;
 	}

@@ -60,7 +60,7 @@ public class Line extends Shape {
 
     @Override
     public String getName() {
-        return "Line";
+        return "曲线";
     }
 
     @Override

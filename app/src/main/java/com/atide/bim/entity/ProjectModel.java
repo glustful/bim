@@ -12,6 +12,7 @@ public class ProjectModel implements Serializable{
     private int photoCount;
     private String _id;
     private String imageNums;
+    private String cpartnum;
 
     public String getImageNums() {
         return imageNums;
@@ -59,5 +60,13 @@ public class ProjectModel implements Serializable{
 
     public void set_id(String _id) {
         this._id = _id;
+    }
+
+    public String getCpartnum() {
+        return cpartnum;
+    }
+
+    public void setCpartnum(String cpartnum) {
+        this.cpartnum = cpartnum;
     }
 }

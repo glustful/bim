@@ -3,6 +3,7 @@ package com.atide.treeview.tree.bean;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
 {
 
 	protected Context mContext;
+	protected Node selectedNode;
 	/**
 	 * 存储所有可见的Node
 	 */
@@ -63,6 +65,27 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
 		/**
 		 * 过滤出可见的Node
 		 */
+		try {
+			Node node = mAllNodes.get(0);
+
+			if (node.isLeaf())
+				selectedNode = node;
+			else{
+				while (!node.isLeaf()){
+					node.setExpand(true);
+					node = node.getChildren().get(0);
+
+				}
+				selectedNode = node;
+			}
+
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+
+
 		mNodes = TreeHelper.filterVisibleNode(mAllNodes);
 		mInflater = LayoutInflater.from(context);
 
@@ -76,7 +99,10 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
 					int position, long id)
 			{
 				expandOrCollapse(position);
-
+				if (mNodes.get(position).isLeaf()){
+					selectedNode = mNodes.get(position);
+					notifyDataSetChanged();
+				}
 				if (onTreeNodeClickListener != null)
 				{
 					onTreeNodeClickListener.onClick(mNodes.get(position),
@@ -130,13 +156,26 @@ public abstract class TreeListViewAdapter<T> extends BaseAdapter
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
 		Node node = mNodes.get(position);
+
 		convertView = getConvertView(node, position, convertView, parent);
 		// 设置内边距
 		convertView.setPadding(node.getLevel() * 30, 3, 3, 3);
+		if (node == selectedNode){
+			convertView.setBackgroundColor(Color.BLUE);
+		}else{
+			convertView.setBackgroundColor(Color.WHITE);
+		}
 		return convertView;
 	}
 
 	public abstract View getConvertView(Node node, int position,
 			View convertView, ViewGroup parent);
 
+	public Node getSelectedNode() {
+		return selectedNode;
+	}
+
+	public void setSelectedNode(Node selectedNode) {
+		this.selectedNode = selectedNode;
+	}
 }

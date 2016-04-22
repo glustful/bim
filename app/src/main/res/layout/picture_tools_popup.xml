@@ -91,7 +91,7 @@
 
 
 
-        <com.atide.bim.ui.CircleView
+        <com.atide.bim.view.CircleView
 
             android:id="@+id/colorPicker"
             android:layout_weight="1"

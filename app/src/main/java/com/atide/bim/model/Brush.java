@@ -19,6 +19,6 @@ public class Brush extends Line {
 
     @Override
     public String getName() {
-        return "Brush";
+        return "笔刷";
     }
 }

@@ -1,1 +1,1 @@
-include ':app', ':libtest', ':treeview'
+include ':app', ':libtest', ':treeview', ':android-horizontal-listview'

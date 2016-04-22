@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<ScrollView
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+   >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/datumName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"/>
+        <EditText
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:hint="说点什么吧....."
+            android:background="@android:drawable/editbox_background"
+            android:lines="5"
+            android:singleLine="false"/>
+        <CheckBox
+            android:id="@+id/sendsms"
+            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="发送短信"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:layout_weight="1"
+                android:id="@+id/isReturn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="退回"/>
+        <Button
+            android:id="@+id/confir"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="通过"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
+    <ProgressBar
+        android:id="@+id/loadingBar"
+        android:layout_width="100dip"
+        android:layout_height="100dip"
+        android:visibility="gone"/>
+</FrameLayout>

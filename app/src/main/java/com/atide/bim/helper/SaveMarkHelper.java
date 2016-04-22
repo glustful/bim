@@ -47,7 +47,7 @@ public class SaveMarkHelper {
            Cursor cursor = db.query(SqliteHelper.TABLE_NAME, new String[]{}, "upload=? and markId=?", new String[]{"0", "-1"}, null, null, null);
             if (cursor==null || cursor.getCount()<1)
                 return;
-            SoapObject soapObject = getMarkInfoKey("GetMarkInfoKey",cursor.getCount());
+            ArrayList<String> soapObject = getMarkInfoKey1("GetMarkInfoKey", cursor.getCount());
             if (soapObject==null)
                 return;
             int i=0;
@@ -63,8 +63,8 @@ public class SaveMarkHelper {
 
 
             while (cursor.moveToNext()){
-               SoapObject info = (SoapObject)(soapObject.getProperty(i));
-               String markId = info.getProperty(0).toString();
+
+               String markId = soapObject.get(i);
                 uploadMarkInfo(cursor, markId, delMarkId);
                 delMarkId = "";
                 i++;
@@ -96,13 +96,11 @@ public class SaveMarkHelper {
             if (uri == null || uri.equals("") || uri.startsWith("http//"))
                 return;
 
-            SoapObject soapObject = getMarkInfoKey("GetMarkNoteKey",1);
+            ArrayList<String> soapObject = getMarkInfoKey1("GetMarkNoteKey", 1);
             if (soapObject==null)
                 return;
 
-
-                SoapObject info = (SoapObject)(soapObject.getProperty(0));
-                String markNoteId = info.getProperty(0).toString();
+                String markNoteId = soapObject.get(0);
                 uploadMarkNote(cursor, markId,markNoteId, "");
 
 
@@ -202,12 +200,16 @@ public class SaveMarkHelper {
      * @param nums
      * @return
      */
-    public SoapObject getMarkInfoKey(String methodName,int nums){
-       Object result = new PrimaryKeyServiceRequest().setMethodName(methodName)
-
-                .request(nums);
-
-        return (SoapObject)result;
+    public ArrayList<String> getMarkInfoKey1(String methodName,int nums){
+        SoapObject result = (SoapObject)new PrimaryKeyServiceRequest().setMethodName(methodName).request(nums);
+        ArrayList<String> results = new ArrayList<>();
+        for (int i=0;i<result.getPropertyCount();i++){
+            SoapObject child = (SoapObject)result.getProperty(i);
+            for (int j=0;j<child.getPropertyCount();j++) {
+                results.add(child.getProperty(j).toString());
+            }
+        }
+        return results;
     }
 
     /**

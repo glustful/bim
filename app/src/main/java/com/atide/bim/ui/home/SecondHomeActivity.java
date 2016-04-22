@@ -14,6 +14,7 @@ import com.atide.bim.entity.ProjectModel;
 import com.atide.bim.request.DrawingMarkServiceRequest;
 import com.atide.bim.request.PartWebServiceRequest;
 import com.atide.bim.ui.picture.PictureListActivity_;
+import com.atide.bim.ui.quality.QualityMainActivity_;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.ui.XListView;
 import com.atide.utils.net.webservice.WsRequest;
@@ -70,11 +71,16 @@ public class SecondHomeActivity extends MainActionBarActivity{
             @Override
             public void callBack(ProjectModel model) {
                 GlobalEntity.getInstance().setPartId(model.get_id());
-                SecondHomeActivity_.intent(mContext).methodName("GetChildParts").paramKey("parentNo").projectModel(model).start();
+                if (model.getCpartnum()==null || model.getCpartnum().equals("") || model.getCpartnum().equals("0")){
+                    QualityMainActivity_.intent(mContext).start();
+                }else {
+                    SecondHomeActivity_.intent(mContext).methodName("GetChildParts").paramKey("parentNo").projectModel(model).start();
+                }
             }
 
             @Override
             public void imageCallBack(ProjectModel model) {
+                GlobalEntity.getInstance().setPartId(model.get_id());
                 PictureListActivity_.intent(mContext).partNo(model.get_id()).partName(model.getTitle()).start();
             }
         });
@@ -140,8 +146,9 @@ public class SecondHomeActivity extends MainActionBarActivity{
                 ProjectModel model = new ProjectModel();
                 model.set_id(array.optJSONObject(i).optString("partno"));
                 model.setTitle(array.optJSONObject(i).optString("partname"));
-                model.setImageNums(array.optJSONObject(i).optString("imagenums","0"));
+                model.setImageNums(array.optJSONObject(i).optString("imagenums", "0"));
                 model.setDescript(array.optJSONObject(i).toString());
+                model.setCpartnum(array.optJSONObject(i).optString("cpartnum"));
                 sectModels.add(model);
             }
             adapter.reload(sectModels);

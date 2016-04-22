@@ -1,0 +1,9 @@
+<resources>
+    <string-array name="quality_declare">
+        <item>申报</item>
+        <item>删除</item>
+    </string-array>
+    <string-array name="quality_approval">
+        <item>审核</item>
+    </string-array>
+</resources>

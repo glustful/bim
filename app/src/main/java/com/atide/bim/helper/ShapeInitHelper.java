@@ -36,7 +36,7 @@ public class ShapeInitHelper {
         String[] a2 = ep.split(",");
         PointF lt = PointUtils.convertOriginalToPercent(a1);
         PointF rb = PointUtils.convertOriginalToPercent(a2);
-        center.set(new PointF(lt.x + (rb.x-lt.x)/2,lt.y + (rb.y-lt.y)/2));
+        center.set(new PointF(lt.x+ (rb.x-lt.x)/4,lt.y + (rb.y-lt.y)/2));// + (rb.x-lt.x)/2
     }
 
     public static void lineInit(Cursor cursor,ArrayList<PointF> dots){

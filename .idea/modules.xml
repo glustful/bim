@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/BIM.iml" filepath="$PROJECT_DIR$/BIM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android-horizontal-listview/android-horizontal-listview.iml" filepath="$PROJECT_DIR$/android-horizontal-listview/android-horizontal-listview.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/libtest/libtest.iml" filepath="$PROJECT_DIR$/libtest/libtest.iml" />
       <module fileurl="file://$PROJECT_DIR$/treeview/treeview.iml" filepath="$PROJECT_DIR$/treeview/treeview.iml" />

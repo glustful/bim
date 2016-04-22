@@ -8,11 +8,12 @@ import android.graphics.RectF;
 public class GlobalEntity {
     private static  GlobalEntity instance;
 
-    private String sectId;
-    private String partId;
+    private String sectId ;
+    private String partId ;
     private String imageId;
     private int width;
     private int height;
+    private String usedUnit = "2";
     private String themeId = "1";
 
 
@@ -69,5 +70,13 @@ public class GlobalEntity {
 
     public void setThemeId(String themeId) {
         this.themeId = themeId;
+    }
+
+    public String getUsedUnit() {
+        return usedUnit;
+    }
+
+    public void setUsedUnit(String usedUnit) {
+        this.usedUnit = usedUnit;
     }
 }

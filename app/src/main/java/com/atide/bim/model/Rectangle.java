@@ -25,6 +25,6 @@ public class Rectangle extends RectShape {
 
     @Override
     public String getName() {
-        return "Rectangle";
+        return "矩形";
     }
 }

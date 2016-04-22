@@ -38,9 +38,9 @@ public abstract class PointShape extends Shape {
 
     @Override
     public boolean isChecked(PointF pointF) {
-        float scale = size*1.0f/Math.min(GlobalEntity.getInstance().getWidth(),GlobalEntity.getInstance().getHeight());
-        float x = Math.abs(pointF.x-centerPoint.x);
-        float y = Math.abs(pointF.y-centerPoint.y);
+        float scale = size/1.5f/Math.min(GlobalEntity.getInstance().getWidth(),GlobalEntity.getInstance().getHeight());
+       // float x = Math.abs(pointF.x-centerPoint.x);
+       // float y = Math.abs(pointF.y-centerPoint.y);
         if (Math.abs(pointF.x-centerPoint.x)<=scale && Math.abs(pointF.y-centerPoint.y)<=scale)
             return true;
         return false;

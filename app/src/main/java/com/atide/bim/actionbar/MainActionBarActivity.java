@@ -9,6 +9,7 @@ import com.atide.bim.utils.Utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -36,6 +37,7 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 	private HashMap<String,Object> item;
 	protected TextView rightButton,rightButton1;
 	protected TextView titleTextView;
+	protected Context mContext;
 
 	public abstract String fetchTitle();
 	public abstract Activity fetchClass();
@@ -57,6 +59,7 @@ public abstract class MainActionBarActivity extends AppCompatActivity {
 		setRightButtonOnClickListener();
 		setTitleButtonOnClickListener();
 		MyApplication.getInstance().addHistoryVistor(initHistory(),-1);
+		mContext = this;
 		/*mToolbar = (Toolbar)findViewById(R.id.toolbar);
 		mToolbar.setTitle("项目主页");
 		setSupportActionBar(mToolbar);

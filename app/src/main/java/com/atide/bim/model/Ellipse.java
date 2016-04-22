@@ -19,6 +19,6 @@ public class Ellipse extends RectShape {
 
     @Override
     public String getName() {
-        return "Ellipse";
+        return "椭圆";
     }
 }

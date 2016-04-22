@@ -10,11 +10,11 @@ import android.util.Log;
 public class Node
 {
 
-	private int id;
+	private String id;
 	/**
 	 * 根节点pId为0
 	 */
-	private int pId = 0;
+	private String pId = "0";
 
 	private String name;
 
@@ -29,6 +29,7 @@ public class Node
 	private boolean isExpand = false;
 
 	private int icon;
+	private Object tag;
 
 	/**
 	 * 下一级的子Node
@@ -44,13 +45,23 @@ public class Node
 	{
 	}
 
-	public Node(int id, int pId, String name)
+	public Node(String id, String pId, String name)
 	{
 		super();
 		this.id = id;
 		this.pId = pId;
 		this.name = name;
 	}
+
+	public Node(String id, String pId, String name,Object tag)
+	{
+		super();
+		this.id = id;
+		this.pId = pId;
+		this.name = name;
+		this.tag = tag;
+	}
+
 
 	public int getIcon()
 	{
@@ -62,22 +73,22 @@ public class Node
 		this.icon = icon;
 	}
 
-	public int getId()
+	public String getId()
 	{
 		return id;
 	}
 
-	public void setId(int id)
+	public void setId(String id)
 	{
 		this.id = id;
 	}
 
-	public int getpId()
+	public String getpId()
 	{
 		return pId;
 	}
 
-	public void setpId(int pId)
+	public void setpId(String pId)
 	{
 		this.pId = pId;
 	}
@@ -120,6 +131,14 @@ public class Node
 	public void setParent(Node parent)
 	{
 		this.parent = parent;
+	}
+
+	public Object getTag() {
+		return tag;
+	}
+
+	public void setTag(Object tag) {
+		this.tag = tag;
 	}
 
 	/**

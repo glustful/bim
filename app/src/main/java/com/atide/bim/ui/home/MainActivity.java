@@ -3,6 +3,7 @@ package com.atide.bim.ui.home;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.Uri;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -18,6 +19,8 @@ import com.atide.bim.request.PartWebServiceRequest;
 import com.atide.bim.ui.input.InputDataActivity;
 import com.atide.bim.ui.input.InputDataActivity_;
 import com.atide.bim.ui.popup.MainActivityPopup;
+import com.atide.bim.ui.quality.QualityMainActivity_;
+import com.atide.bim.utils.Utils;
 import com.atide.bim.utils.WebServiceUtils;
 import com.atide.ui.XListView;
 import com.atide.utils.net.webservice.WsRequest;
@@ -78,6 +81,7 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
 
     @AfterViews
     void initUI(){
+
         mContext = this;
         mXListView.setXListViewListener(this);
         mXListView.setPullRefreshEnable(false);
@@ -92,11 +96,40 @@ public class MainActivity extends Activity implements XListView.IXListViewListen
 
             @Override
             public void imageCallBack(ProjectModel model) {
-                InputDataActivity_.intent(mContext).start();
+
             }
         });
-        getUserProjects();
-        saveMarkHelper.saveMarkInfos();
+
+        login();
+
+    }
+
+    private void login(){
+        loadingBar.setVisibility(View.VISIBLE);
+        new WsRequest() {
+            @Override
+            public void onResponse(WsResponseMessage msg) {
+                loadingBar.setVisibility(View.GONE);
+                if (WebServiceUtils.getResponseData(mContext, msg)) {
+                    User.getLoginUser().init(msg.mData);
+                    getUserProjects();
+                    saveMarkHelper.saveMarkInfos();
+                   /* MainActivity_.intent(mContext).start();
+                    finish();*/
+                }else{
+
+                    Utils.showMsg("登陆失败");
+                }
+
+            }
+        }.setHost("http://220.164.192.83:9300")
+                .setFlag(true)
+                .setUrl("/Services/AuthenticateService.asmx")
+                .setNameSpace("http://www.atidesoft.com/AuthenticateService/")
+                .setMethodName("Login")
+                .addParam("regName", "cpblb")
+                .addParam("pwd", "cpblb123")
+                .notifyRequest();
     }
 
 

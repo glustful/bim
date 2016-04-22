@@ -103,6 +103,8 @@ public class MainHomeAdapter extends BaseAdapter {
             if (model.getImageNums()==null || model.getImageNums().equals("")){
                 photoCount.setVisibility(View.GONE);
                 //photo.setVisibility(View.GONE);
+            }else{
+                photoCount.setVisibility(View.VISIBLE);
             }
             photoCount.setText(model.getImageNums());
             title.setText(model.getTitle());

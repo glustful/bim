@@ -43,7 +43,7 @@ public class TabAdapter extends FragmentPagerAdapter {
         return list_fragment.get(position % list_fragment.size()).getArguments().getString("title");
     }
 
-    public void reload(ArrayList<Fragment> fragments){
+    public void reload(ArrayList<SuperFragment> fragments){
         list_fragment.clear();
         list_fragment.addAll(fragments);
         notifyDataSetChanged();

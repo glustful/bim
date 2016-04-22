@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.atide.bim.entity.ShapeEntity;
+import com.atide.bim.exception.CrashHandler;
 import com.atide.bim.sqlite.DatabaseManager;
 import com.atide.bim.sqlite.SqliteHelper;
 import com.atide.bim.utils.WebServiceUtils;
@@ -56,11 +57,14 @@ public class MyApplication extends Application {
 
 	@Override
 	public void onCreate() {
+		CrashHandler crashHandler = CrashHandler.getInstance();
+		crashHandler.init(getApplicationContext());
 		mInstance = this;
 		DatabaseManager.initializeInstance(SqliteHelper.getInstance(this));
 
 		initImageLoader();
 		WebServiceUtils.downloadShapeInfo();
+
 		super.onCreate();
 	}
 
@@ -82,7 +86,7 @@ public class MyApplication extends Application {
 	}
 
 
-	private List<Activity> mActivityList = new ArrayList<Activity>();
+	/*private List<Activity> mActivityList = new ArrayList<Activity>();
 
 	public void addActivity(Activity activity) {
 		mActivityList.add(activity);
@@ -94,11 +98,11 @@ public class MyApplication extends Application {
 
 	public Boolean activityTaskStackContains(Activity activity) {
 		return mActivityList.contains(activity);
-	}
+	}*/
 
-	public Boolean isActivityStackTop() {
+	/*public Boolean isActivityStackTop() {
 		return mActivityList.size() <= 1 ? true : false;
-	}
+	}*/
 
 	public String getVersionCode() throws PackageManager.NameNotFoundException {
 		PackageManager manager = getPackageManager();

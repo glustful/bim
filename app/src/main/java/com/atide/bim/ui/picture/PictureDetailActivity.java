@@ -28,7 +28,8 @@ import com.atide.bim.model.CameraShape;
 import com.atide.bim.model.NoticeShape;
 import com.atide.bim.model.Shape;
 import com.atide.bim.entity.User;
-import com.atide.bim.ui.CircleView;
+import com.atide.bim.utils.Utils;
+import com.atide.bim.view.CircleView;
 import com.atide.bim.ui.dialog.NoticeEditDailog_;
 import com.atide.bim.ui.message.SendMessageActivity;
 import com.atide.bim.ui.message.SendMessageActivity_;
@@ -219,6 +220,7 @@ public class PictureDetailActivity extends MainActionBarActivity {
 						message = "未知的错误";
 						break;
 				}
+				Utils.showMsg(message);
 
 			}
 
@@ -253,13 +255,14 @@ public class PictureDetailActivity extends MainActionBarActivity {
 
 				{
 					Intent getImageByCamera = new Intent("android.media.action.IMAGE_CAPTURE");
-					String out_file_path = Environment.getExternalStorageDirectory() + "/" + getPackageName() + "/";
-					File dir = new File(out_file_path);
+					File dir = mContext.getExternalFilesDir(null);
+
 					if (!dir.exists()) {
-						dir.mkdirs();
+						boolean result = dir.mkdirs();
+
 					}
 
-					capturePath = out_file_path + System.currentTimeMillis() + ".jpg";
+					capturePath = dir.getAbsolutePath() +"/" + System.currentTimeMillis() + ".jpg";
 					getImageByCamera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(capturePath)));
 					getImageByCamera.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
 					startActivityForResult(getImageByCamera, 1);
